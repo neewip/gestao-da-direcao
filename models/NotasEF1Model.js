@@ -51,12 +51,12 @@ function executeSQL(sql, callback) {
 }
 // Lista todos os clientes
 exports.findAll = (callback) => {
-  const sql = "SELECT * FROM Clientes";
+  const sql = "SELECT * FROM NotasEF1";
   executeSQL(sql, callback);
 };
 // Busca um cliente pelo ID
-exports.findById = (id, callback) => {
-  const sql = `SELECT * FROM Clientes WHERE ID = ${id}`;
+exports.findById = (RM, callback) => {
+  const sql = `SELECT * FROM NotasEF1 WHERE RM = ${RM}`;
   executeSQL(sql, (err, clientes) => {
     if (err) {
       callback(err, null);
@@ -70,19 +70,20 @@ exports.findById = (id, callback) => {
 };
 // Cria um novo cliente
 exports.create = (cliente, callback) => {
-  const sql = `INSERT INTO Clientes (nome, email, telefone) VALUES
-('${cliente.nome}', '${cliente.email}', '${cliente.telefone}')`;
+  const sql = `INSERT INTO NotasEF1 (RM, [1EtapaCN],	[2EtapaCN],	[3EtapaCN],	NotaFinalCN,	[1EtapaMAT],	[2EtapaMAT],	[3EtapaMAT],	NotaFinalMAT,	[1EtapaLP],	[2EtapaLP],	[3EtapaLP],	NotaFinalLP,	[1EtapaAR],	[2EtapaAR],	[3EtapaAR],	NotaFinalAR,	[1EtapaEF],	[2EtapaEF],	[3EtapaEF],	NotaFinalEF,	[1EtapaCH],	[2EtapaCH],	[3EtapaCH],	NotaFinalCH,	[1EtapaCCE],	[2EtapaCCE], [3EtapaCCE],	NotaFinalCCE,	[1EtapaLI],	[2EtapaLI],	[3EtapaLI],	NotaFinalLI,	[1EtapaPF],	[2EtapaPF],	[3EtapaPF],	NotaFinalPF,	[1EtapaROB],	[2EtapaROB],	[3EtapaROB], NotaFinalROB,	[1EtapaPR],	[2EtapaPR],	[3EtapaPR],	NotaFinalPR,	[1EtapaPSC],	[2EtapaPSC],	[3EtapaPSC],	NotaFinalPSC,
+) VALUES
+('${cliente.RM}', '${cliente['1EtapaCN']}','${cliente['2EtapaCN']}, '${cliente['3EtapaCN']}, '${cliente.NotaFinalCN}', '${cliente['1EtapaMAT']}, '${cliente['2EtapaMAT']}, '${cliente['3EtapaMAT']}, '${cliente.NotaFinalLP}', '${cliente['1EtapaAR']}, '${cliente['2EtapaAR']}, '${cliente['3EtapaAR']}, '${cliente.NotaFinalAR}', '${cliente['1EtapaEF']}, '${cliente['2EtapaEF']}, '${cliente['3EtapaEF']}, '${cliente.NotaFinalEF}'),  '${cliente['1EtapaCH']}, '${cliente['2EtapaCH']}, '${cliente['3EtapaCH']}, '${cliente.NotaFinalCH}') `;
   executeSQL(sql, callback);
 };
 // Atualiza um cliente pelo ID
-exports.update = (id, cliente, callback) => {
-  const sql = `UPDATE Clientes SET nome = '${cliente.nome}', email =
-'${cliente.email}', telefone = '${cliente.telefone}' WHERE ID =
-${id}`;
+exports.update = (RM, cliente, callback) => {
+  const sql = `UPDATE NotasEF1 SET nome = '${cliente.nome}', email =
+'${cliente.email}', telefone = '${cliente.telefone}' WHERE RM =
+${RM}`;
   executeSQL(sql, callback);
 };
-// Exclui um cliente pelo ID
-exports.delete = (id, callback) => {
-  const sql = `DELETE FROM Clientes WHERE ID = ${id}`;
+// Exclui um cliente pelo RM
+exports.delete = (RM, callback) => {
+  const sql = `DELETE FROM NotasEF1 WHERE RM = ${RM}`;
   executeSQL(sql, callback);
 };

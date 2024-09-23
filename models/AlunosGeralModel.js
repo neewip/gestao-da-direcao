@@ -51,12 +51,12 @@ function executeSQL(sql, callback) {
 }
 // Lista todos os clientes
 exports.findAll = (callback) => {
-  const sql = "SELECT * FROM Clientes";
+  const sql = "SELECT * FROM AlunosGeral";
   executeSQL(sql, callback);
 };
 // Busca um cliente pelo ID
-exports.findById = (id, callback) => {
-  const sql = `SELECT * FROM Clientes WHERE ID = ${id}`;
+exports.findById = (RM, callback) => {
+  const sql = `SELECT * FROM AlunosGeral WHERE RM = ${RM}`;
   executeSQL(sql, (err, clientes) => {
     if (err) {
       callback(err, null);
@@ -70,19 +70,19 @@ exports.findById = (id, callback) => {
 };
 // Cria um novo cliente
 exports.create = (cliente, callback) => {
-  const sql = `INSERT INTO Clientes (nome, email, telefone) VALUES
-('${cliente.nome}', '${cliente.email}', '${cliente.telefone}')`;
+  const sql = `INSERT INTO AlunosGeral (RM, NomeAluno, Turma, Ano) VALUES
+('${cliente.RM}', '${cliente.NomeAluno}', '${cliente.Turma}', '${cliente.Ano}')`;
   executeSQL(sql, callback);
 };
 // Atualiza um cliente pelo ID
-exports.update = (id, cliente, callback) => {
-  const sql = `UPDATE Clientes SET nome = '${cliente.nome}', email =
-'${cliente.email}', telefone = '${cliente.telefone}' WHERE ID =
-${id}`;
+exports.update = (RM, cliente, callback) => {
+  const sql = `UPDATE Clientes SET NomeAluno = '${cliente.NomeAluno}', Turma =
+'${cliente.Turma}', Ano = '${cliente.Ano}' WHERE RM =
+${RM}`;
   executeSQL(sql, callback);
 };
 // Exclui um cliente pelo ID
-exports.delete = (id, callback) => {
-  const sql = `DELETE FROM Clientes WHERE ID = ${id}`;
+exports.delete = (RM, callback) => {
+  const sql = `DELETE FROM Clientes WHERE RM = ${RM}`;
   executeSQL(sql, callback);
 };
