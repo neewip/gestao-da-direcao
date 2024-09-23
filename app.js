@@ -1,7 +1,7 @@
 // app.js
 // habilitar o express
 const express = require('express');
-const clienteRoutes = require('./routes/clienteRoutes');
+const clienteRoutes = require('./routes/allRoutes.js');
 const app = express();
 app.use(express.json()); // Habilitar Middleware para manuseio de JSON
 app.use('/api', clienteRoutes); // uso das rotas definidas em

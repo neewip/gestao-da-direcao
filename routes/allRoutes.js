@@ -1,8 +1,9 @@
 // routes/clienteRoutes.js 
 const express = require('express');
 const router = express.Router(); // Cria um novo router como uma  //instância de middleware e rotas 
+
 const clientesController =
-    require('../controllers/clientesController'); // Importa o controller  //que contém a lógica de negócio 
+    require('../controllers/AlunosGeralController'); // Importa o controller  //que contém a lógica de negócio 
 // Rota para listar todos os clientes 
 // GET /api/clientes 
 router.get('/clientes', clientesController.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 

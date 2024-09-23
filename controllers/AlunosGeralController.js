@@ -1,5 +1,5 @@
 // controllers/clientesController.js
-const clienteModel = require('../models/clienteModel');// Importa o
+const clienteModel = require('../models/NotasEMModel');// Importa o
 //modelo clienteModel que contém as funções para interagir com o banco
 //de dados
 // Listar todos os clientes
