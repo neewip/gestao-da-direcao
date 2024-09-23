@@ -1,18 +1,18 @@
 // controllers/clientesController.js
-const clienteModel = require('../models/NotasEMModel');// Importa o
+const alunoModel = require('../models/AlunosGeralModel');// Importa o
 //modelo clienteModel que contém as funções para interagir com o banco
 //de dados
 // Listar todos os clientes
 // Esta função é chamada quando uma requisição GET é feita para
 //api/clientes
 exports.listarTodos = (req, res) => {
-clienteModel.findAll((err, clientes) => {
+alunoModel.findAll((err, aluno) => {
 if (err) {
-res.status(500).send({ message: 'Erro ao buscar clientes'
+res.status(500).send({ message: 'Erro ao buscar aluno'
 
 });// Envia um status HTTP 500 se ocorrer um erro
 } else {
-res.send(clientes);// Envia os dados dos clientes como
+res.send(aluno);// Envia os dados dos clientes como
 
 //resposta JSON
 }
@@ -22,17 +22,17 @@ res.send(clientes);// Envia os dados dos clientes como
 // Esta função é chamada quando uma requisição GET é feita para
 //api/clientes/:id
 exports.buscarPorId = (req, res) => {
-clienteModel.findById(req.params.id, (err, cliente) => {
+alunoModel.findById(req.params.id, (err, aluno) => {
 if (err) {
 
-res.status(500).send({ message: 'Erro ao buscar cliente'
+res.status(500).send({ message: 'Erro ao buscar aluno'
 
 });// Envia um status HTTP 500 se ocorrer um erro
-} else if (!cliente) {
-res.status(404).send({ message: 'Cliente não encontrado'
+} else if (!aluno) {
+res.status(404).send({ message: 'aluno não encontrado'
 });// Envia um status HTTP 404 se nenhum cliente for encontrado
 } else {
-res.send(cliente); // Envia os dados do cliente como
+res.send(aluno); // Envia os dados do cliente como
 
 //resposta JSON
 }
@@ -48,13 +48,13 @@ res.status(400).send({ message: 'Dados incompletos!' }); //
 //fornecidos
 return;
 }
-clienteModel.create(req.body, (err) => {
+alunoModel.create(req.body, (err) => {
 if (err) {
-res.status(500).send({ message: 'Erro ao criar cliente'
+res.status(500).send({ message: 'Erro ao criar aluno'
 
 });
 } else {
-res.status(201).send({ message: 'Cliente criado com sucesso' });
+res.status(201).send({ message: 'aluno criado com sucesso' });
 // Envia um status HTTP 201 como resposta de sucesso
 }
 });
@@ -67,26 +67,26 @@ if (!req.body.nome || !req.body.email || !req.body.telefone) {
 res.status(400).send({ message: 'Dados incompletos para atualização!' });
 return;
 }
-clienteModel.update(req.params.id, req.body, (err) => {
+alunoModel.update(req.params.id, req.body, (err) => {
 if (err) {
-res.status(500).send({ message: 'Erro ao atualizar cliente' });
+res.status(500).send({ message: 'Erro ao atualizar aluno' });
 } else {
 
-res.status(200).send({ message: 'Cliente atualizado com sucesso' });
+res.status(200).send({ message: 'aluno atualizado com sucesso' });
 }
 });
 };
-// Excluir um cliente
+// Excluir um  aluno'
 // Esta função é chamada quando uma requisição DELETE é feita para
 //api/clientes/:id
 exports.excluir = (req, res) => {
-clienteModel.delete(req.params.id, (err) => {
+alunoModel.delete(req.params.id, (err) => {
 if (err) {
-res.status(500).send({ message: 'Erro ao excluir cliente'
+res.status(500).send({ message: 'Erro ao excluir aluno'
 
 });
 } else {
-res.status(200).send({ message: 'Cliente excluído com sucesso' });
+res.status(200).send({ message: 'aluno excluído com sucesso' });
 }
 });
 };
