@@ -1,24 +1,34 @@
 // app.js
-// habilitar o express
-const express = require('express');
-const clienteRoutes = require('./routes/allRoutes.js');
-const app = express();
-app.use(express.json()); // Habilitar Middleware para manuseio de JSON
-app.use('/api', clienteRoutes); // uso das rotas definidas em
-//clienteRoutes.js
-const port = process.env.PORT || 3000;
-// Define a porta em que o servidor irá rodar.
-// `process.env.PORT` permite que a porta seja configurada pelo ambiente
-//de execução, útil em ambientes de produção,
-// como quando o aplicativo é implantado em plataformas de hospedagem que
-//atribuem portas dinamicamente (por exemplo, Heroku, AWS Elastic
-//Beanstalk).
-// Se `process.env.PORT` não estiver definido, o servidor usará a porta
-//3000 por padrão, o que é comum para desenvolvimento local.
-app.listen(port, () => {
-console.log(`Servidor rodando na porta ${port}`);
 
-// Inicia o servidor para escutar na porta especificada.
-// Quando o servidor estiver pronto e escutando, ele imprimirá uma
-//mensagem no console indicando em qual porta está rodando.
+// Importa o módulo "express" para criar o servidor
+const express = require("express");
+
+// Cria uma instância do Express, que será usada como a aplicação principal
+const app = express();
+
+// Importa o middleware "cors" para habilitar o compartilhamento de recursos entre diferentes origens (Cross-Origin Resource Sharing)
+const cors = require('cors');
+
+// Define a porta em que o servidor vai rodar. Primeiro tenta usar a variável de ambiente PORT, senão usa a porta 3001
+const port = process.env.PORT || 3001;
+
+// Carrega as variáveis de ambiente do arquivo .env
+require("dotenv").config();
+
+// Middleware do Express para interpretar o corpo das requisições como JSON
+app.use(express.json());
+
+// Middleware "cors" para permitir requisições de diferentes origens (evita problemas de CORS)
+app.use(cors());
+
+// Importa as rotas de usuários definidas em "./routes/users"
+const userRoutes = require("./routes/allRoutes");
+
+// Associa as rotas de usuários ao caminho "/users"
+// Todas as requisições que começarem com "/users" serão tratadas pelas rotas definidas em "userRoutes"
+app.use("/", userRoutes);
+
+// Inicia o servidor na porta definida e exibe uma mensagem no console
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });

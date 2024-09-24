@@ -1,193 +1,38 @@
-// routes/clienteRoutes.js 
-const express = require('express');
-const router = express.Router(); // Cria um novo router como uma  //instância de middleware e rotas 
+// routes/users.js
 
-const alunosController =
-    require('../controllers/AlunosGeralController'); // Importa o controller  //que contém a lógica de negócio 
-// Rota para listar todos os clientes 
-// GET /api/clientes 
-router.get('/alunos', alunosController.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 
-// para obter e retornar todos os clientes do banco de dados. 
-// Rota para buscar um cliente específico por ID 
-// GET /api/clientes/:id 
-router.get('/alunos/:RM', alunosController.buscarPorId); // Esta rota responde a requisições GET para um ID específico de  //cliente. 
-// Utiliza a função buscarPorId do controller de clientes para  //encontrar e retornar um cliente específico. 
-// Rota para criar um novo cliente 
-// POST /api/clientes 
-router.post('/alunos', alunosController.criar);
-// Esta rota responde a requisições POST, criando um novo cliente com  //os dados fornecidos no corpo da requisição. 
-// Utiliza a função criar do controller de clientes para adicionar o  //novo cliente ao banco de dados. 
-// Rota para atualizar um cliente existente 
-// PUT /api/clientes/:id 
-router.put('/alunos/:RM', alunosController.atualizar);
-// Esta rota responde a requisições PUT, atualizando os dados de um  //cliente existente baseado no ID fornecido. 
-// Utiliza a função atualizar do controller de clientes para modificar  //o cliente especificado no banco de dados. 
-// Rota para deletar um cliente 
-// DELETE /api/clientes/:id 
-router.delete('/alunos/:RM', alunosController.excluir); // Esta rota responde a requisições DELETE, removendo um cliente do  //banco de dados baseado no ID fornecido. 
-// Utiliza a função excluir do controller de clientes para deletar o  //cliente especificado. 
+// Importa o módulo "express" para criar um roteador
+const express = require("express");
 
-//
+// Cria uma nova instância do roteador do Express
+const router = express.Router();
 
-const avaliaController =
-    require('../controllers/AvaliaExtController'); // Importa o controller  //que contém a lógica de negócio 
-// Rota para listar todos os clientes 
-// GET /api/clientes 
-router.get('/avalia', avaliaController.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 
-// para obter e retornar todos os clientes do banco de dados. 
-// Rota para buscar um cliente específico por ID 
-// GET /api/clientes/:id 
-router.get('/avalia/:rm', avaliaController.buscarPorId); // Esta rota responde a requisições GET para um ID específico de  //cliente. 
-// Utiliza a função buscarPorId do controller de clientes para  //encontrar e retornar um cliente específico. 
-// Rota para criar um novo cliente 
-// POST /api/clientes 
-router.post('/avalia', avaliaController.criar);
-// Esta rota responde a requisições POST, criando um novo cliente com  //os dados fornecidos no corpo da requisição. 
-// Utiliza a função criar do controller de clientes para adicionar o  //novo cliente ao banco de dados. 
-// Rota para atualizar um cliente existente 
-// PUT /api/clientes/:id 
-router.put('/avalia/:rm', avaliaController.atualizar);
-// Esta rota responde a requisições PUT, atualizando os dados de um  //cliente existente baseado no ID fornecido. 
-// Utiliza a função atualizar do controller de clientes para modificar  //o cliente especificado no banco de dados. 
-// Rota para deletar um cliente 
-// DELETE /api/clientes/:id 
-router.delete('/avalia/:rm', avaliaController.excluir); // Esta rota responde a requisições DELETE, removendo um cliente do  //banco de dados baseado no ID fornecido. 
-// Utiliza a função excluir do controller de clientes para deletar o  //cliente especificado. 
+
+// Importa o controller de usuários que contém a lógica para cada rota
+const usersController = require("../controllers/AlunosGeralController");
+
+// Rota GET para obter todos os usuários
+// Chama o método "getUsers" do controller quando a rota raiz "/users" for acessada
+router.get("/alunos", usersController.getUsers);
+
+// Rota GET para obter um usuário específico pelo ID
+// Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
+router.get("/alunos/:RM", usersController.getUser);
+
+// Rota POST para criar um novo usuário
+// Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
+router.post("/alunos", usersController.createUser);
+
+// Rota PUT para atualizar um usuário existente pelo ID
+// Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
+router.put("/alunos/:RM", usersController.updateUser);
+
+// Rota DELETE para deletar um usuário específico pelo ID
+// Chama o método "deleteUser" do controller ao acessar "/users/:id"
+router.delete("/alunos/:RM", usersController.deleteUser);
 
 //
 
-const avaliasesiController =
-    require('../controllers/AvaliaSESIController'); // Importa o controller  //que contém a lógica de negócio 
-// Rota para listar todos os clientes 
-// GET /api/clientes 
-router.get('/avaliasesi', avaliasesiController.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 
-// para obter e retornar todos os clientes do banco de dados. 
-// Rota para buscar um cliente específico por ID 
-// GET /api/clientes/:id 
-router.get('/avaliasesi/:rm', avaliasesiController.buscarPorId); // Esta rota responde a requisições GET para um ID específico de  //cliente. 
-// Utiliza a função buscarPorId do controller de clientes para  //encontrar e retornar um cliente específico. 
-// Rota para criar um novo cliente 
-// POST /api/clientes 
-router.post('/avaliasesi', avaliasesiController.criar);
-// Esta rota responde a requisições POST, criando um novo cliente com  //os dados fornecidos no corpo da requisição. 
-// Utiliza a função criar do controller de clientes para adicionar o  //novo cliente ao banco de dados. 
-// Rota para atualizar um cliente existente 
-// PUT /api/clientes/:id 
-router.put('/avaliasesi/:rm', avaliasesiController.atualizar);
-// Esta rota responde a requisições PUT, atualizando os dados de um  //cliente existente baseado no ID fornecido. 
-// Utiliza a função atualizar do controller de clientes para modificar  //o cliente especificado no banco de dados. 
-// Rota para deletar um cliente 
-// DELETE /api/clientes/:id 
-router.delete('/avaliasesi/:rm', avaliasesiController.excluir); // Esta rota responde a requisições DELETE, removendo um cliente do  //banco de dados baseado no ID fornecido. 
-// Utiliza a função excluir do controller de clientes para deletar o  //cliente especificado. 
-
-//
-
-const cursotecController =
-    require('../controllers/CursoTecController'); // Importa o controller  //que contém a lógica de negócio 
-// Rota para listar todos os clientes 
-// GET /api/clientes 
-router.get('/cursotec/', cursotecController.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 
-// para obter e retornar todos os clientes do banco de dados. 
-// Rota para buscar um cliente específico por ID 
-// GET /api/clientes/:id 
-router.get('/cursotec/:rm', cursotecController.buscarPorId); // Esta rota responde a requisições GET para um ID específico de  //cliente. 
-// Utiliza a função buscarPorId do controller de clientes para  //encontrar e retornar um cliente específico. 
-// Rota para criar um novo cliente 
-// POST /api/clientes 
-router.post('/cursotec', cursotecController.criar);
-// Esta rota responde a requisições POST, criando um novo cliente com  //os dados fornecidos no corpo da requisição. 
-// Utiliza a função criar do controller de clientes para adicionar o  //novo cliente ao banco de dados. 
-// Rota para atualizar um cliente existente 
-// PUT /api/clientes/:id 
-router.put('/cursotec/:rm', cursotecController.atualizar);
-// Esta rota responde a requisições PUT, atualizando os dados de um  //cliente existente baseado no ID fornecido. 
-// Utiliza a função atualizar do controller de clientes para modificar  //o cliente especificado no banco de dados. 
-// Rota para deletar um cliente 
-// DELETE /api/clientes/:id 
-router.delete('cursotec/:rm', cursotecController.excluir); // Esta rota responde a requisições DELETE, removendo um cliente do  //banco de dados baseado no ID fornecido. 
-// Utiliza a função excluir do controller de clientes para deletar o  //cliente especificado. 
-
-//
-
-const NotasEF1Controller =
-    require('../controllers/NotasEF1Controller'); // Importa o controller  //que contém a lógica de negócio 
-// Rota para listar todos os clientes 
-// GET /api/clientes 
-router.get('/notasEF1',  NotasEF1Controller.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 
-// para obter e retornar todos os clientes do banco de dados. 
-// Rota para buscar um cliente específico por ID 
-// GET /api/clientes/:id 
-router.get('/notasEF1/:RM', NotasEF1Controller.buscarPorId); // Esta rota responde a requisições GET para um ID específico de  //cliente. 
-// Utiliza a função buscarPorId do controller de clientes para  //encontrar e retornar um cliente específico. 
-// Rota para criar um novo cliente 
-// POST /api/clientes 
-router.post('/notasEF1', NotasEF1Controller.criar);
-// Esta rota responde a requisições POST, criando um novo cliente com  //os dados fornecidos no corpo da requisição. 
-// Utiliza a função criar do controller de clientes para adicionar o  //novo cliente ao banco de dados. 
-// Rota para atualizar um cliente existente 
-// PUT /api/clientes/:id 
-router.put('/notasEF1/:RM', NotasEF1Controller.atualizar);
-// Esta rota responde a requisições PUT, atualizando os dados de um  //cliente existente baseado no ID fornecido. 
-// Utiliza a função atualizar do controller de clientes para modificar  //o cliente especificado no banco de dados. 
-// Rota para deletar um cliente 
-// DELETE /api/clientes/:id 
-router.delete('/notasEF1/:RM', NotasEF1Controller.excluir); // Esta rota responde a requisições DELETE, removendo um cliente do  //banco de dados baseado no ID fornecido. 
-// Utiliza a função excluir do controller de clientes para deletar o  //cliente especificado. 
-
-//
-
-const NotasEF2Controller =
-    require('../controllers/NotasEF2Controller'); // Importa o controller  //que contém a lógica de negócio 
-// Rota para listar todos os clientes 
-// GET /api/clientes 
-router.get('/NotasEF2', NotasEF2Controller.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 
-// para obter e retornar todos os clientes do banco de dados. 
-// Rota para buscar um cliente específico por ID 
-// GET /api/clientes/:id 
-router.get('/NotasEF2/:RM', NotasEF2Controller.buscarPorId); // Esta rota responde a requisições GET para um ID específico de  //cliente. 
-// Utiliza a função buscarPorId do controller de clientes para  //encontrar e retornar um cliente específico. 
-// Rota para criar um novo cliente 
-// POST /api/clientes 
-router.post('/NotasEF2', NotasEF2Controller.criar);
-// Esta rota responde a requisições POST, criando um novo cliente com  //os dados fornecidos no corpo da requisição. 
-// Utiliza a função criar do controller de clientes para adicionar o  //novo cliente ao banco de dados. 
-// Rota para atualizar um cliente existente 
-// PUT /api/clientes/:id 
-router.put('/NotasEF2/:RM', NotasEF2Controller.atualizar);
-// Esta rota responde a requisições PUT, atualizando os dados de um  //cliente existente baseado no ID fornecido. 
-// Utiliza a função atualizar do controller de clientes para modificar  //o cliente especificado no banco de dados. 
-// Rota para deletar um cliente 
-// DELETE /api/clientes/:id 
-router.delete('/NotasEF2/:RM', NotasEF2Controller.excluir); // Esta rota responde a requisições DELETE, removendo um cliente do  //banco de dados baseado no ID fornecido. 
-// Utiliza a função excluir do controller de clientes para deletar o  //cliente especificado. 
-
-//
-
-const NotasEMController =
-    require('../controllers/NotasEMController'); // Importa o controller  //que contém a lógica de negócio 
-// Rota para listar todos os clientes 
-// GET /api/clientes 
-router.get('/NotasEM', NotasEMController.listarTodos); // Esta rota responde a requisições GET e utiliza a função listarTodos  //do controller de clientes 
-// para obter e retornar todos os clientes do banco de dados. 
-// Rota para buscar um cliente específico por ID 
-// GET /api/clientes/:id 
-router.get('/NotasEM/:rm', NotasEMController.buscarPorId); // Esta rota responde a requisições GET para um ID específico de  //cliente. 
-// Utiliza a função buscarPorId do controller de clientes para  //encontrar e retornar um cliente específico. 
-// Rota para criar um novo cliente 
-// POST /api/clientes 
-router.post('/NotasEM', NotasEMController.criar);
-// Esta rota responde a requisições POST, criando um novo cliente com  //os dados fornecidos no corpo da requisição. 
-// Utiliza a função criar do controller de clientes para adicionar o  //novo cliente ao banco de dados. 
-// Rota para atualizar um cliente existente 
-// PUT /api/clientes/:id 
-router.put('/NotasEM/:rm', NotasEMController.atualizar);
-// Esta rota responde a requisições PUT, atualizando os dados de um  //cliente existente baseado no ID fornecido. 
-// Utiliza a função atualizar do controller de clientes para modificar  //o cliente especificado no banco de dados. 
-// Rota para deletar um cliente 
-// DELETE /api/clientes/:id 
-router.delete('/NotasEM/:rm', NotasEMController.excluir); // Esta rota responde a requisições DELETE, removendo um cliente do  //banco de dados baseado no ID fornecido. 
-// Utiliza a função excluir do controller de clientes para deletar o  //cliente especificado. 
 
 
-module.exports = router; // Exporta o router configurado para ser  //usado pelo aplicativo principal 
+// Exporta o roteador para que ele possa ser usado na aplicação principal (app.js)
+module.exports = router;

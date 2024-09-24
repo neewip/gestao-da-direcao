@@ -6,8 +6,7 @@ const alunoModel = require('../models/NotasEF2Model');// Importa o
 // Esta função é chamada quando uma requisição GET é feita para
 //api/clientes
 exports.listarTodos = (req, res) => {
-};
-Model.findAll((err, aluno) => {
+alunoModel.findAll((err, aluno) => {
 if (err) {
 res.status(500).send({ message: 'Erro ao buscar aluno'
 
@@ -18,7 +17,7 @@ res.send(aluno);// Envia os dados dos clientes como
 //resposta JSON
 }
 });
-
+};
 // Buscar cliente por ID
 // Esta função é chamada quando uma requisição GET é feita para
 //api/clientes/:id
@@ -77,7 +76,7 @@ res.status(200).send({ message: 'aluno atualizado com sucesso' });
 }
 });
 };
-// Excluir um cliente
+// Excluir um  aluno'
 // Esta função é chamada quando uma requisição DELETE é feita para
 //api/clientes/:id
 exports.excluir = (req, res) => {

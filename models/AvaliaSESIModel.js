@@ -55,7 +55,7 @@ exports.findAll = (callback) => {
   executeSQL(sql, callback);
 };
 // Busca um cliente pelo ID
-exports.findById = (id, callback) => {
+exports.findById = (rm, callback) => {
   const sql = `SELECT * FROM AvaliaSESI WHERE rm = ${rm}`;
   executeSQL(sql, (err, clientes) => {
     if (err) {
@@ -76,13 +76,13 @@ exports.create = (cliente, callback) => {
 };
 // Atualiza um cliente pelo ID
 exports.update = (rm, cliente, callback) => {
-  const sql = `UPDATE Clientes SET Ebep = '${cliente.Ebep}', ComDeficiência =
+  const sql = `UPDATE AvaliaSESI SET Ebep = '${cliente.Ebep}', ComDeficiência =
 '${cliente.ComDeficiência}', Turma = '${cliente.Turma}', PorcentagemAcertoIngles = '${cliente.PorcentagemAcertoIngles}', CH = '${cliente.CH}', CN = '${cliente.CN}', LP = '${cliente.LP}', MAT = '${cliente.MAT}'  WHERE rm =
 ${rm}`;
   executeSQL(sql, callback);
 };
 // Exclui um cliente pelo ID
 exports.delete = (rm, callback) => {
-  const sql = `DELETE FROM Clientes WHERE rm = ${rm}`;
+  const sql = `DELETE FROM AvaliaSESI WHERE rm = ${rm}`;
   executeSQL(sql, callback);
 };
