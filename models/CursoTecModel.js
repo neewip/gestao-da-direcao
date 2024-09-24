@@ -77,7 +77,7 @@ exports.create = (cliente, callback) => {
 // Atualiza um cliente pelo ID
 exports.update = (rm, cliente, callback) => {
   const sql = `UPDATE CursoTec SET nome = '${cliente.nome}', frequencia =
-'${cliente.frequencia}', notaCt = '${cliente.notaCt}' ano = '${cliente.ano}', etapa =
+'${cliente.frequencia}', notaCt = '${cliente.notaCt}', ano = '${cliente.ano}', etapa =
 '${cliente.etapa}' WHERE rm =
 ${rm}`;
   executeSQL(sql, callback);
