@@ -66,54 +66,10 @@ async function getUserById(rm) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
-// Função para criar um novo usuário
-async function createUser(rm, Ebep, ComDeficiencia, Turma, PorcentagemAcertoIngles, CH, CN, LP, MAT) {
-  const query = `INSERT INTO AvaliaSESI (rm, Ebep, ComDeficiencia, Turma, PorcentagemAcertoIngles, CH, CN, LP, MAT) VALUES (@rm, @Ebep, @ComDeficiencia, @Turma, @PorcentagemAcertoIngles, @CH, @CN, @LP, @MAT);`;  // Query SQL para inserir um novo registro
-  const params = [
-    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
-    { name: "Ebep", type: TYPES.Int, value: Ebep },  // Define o parâmetro @email
-    { name: "ComDeficiencia", type: TYPES.Int, value: ComDeficiencia || null },
-    { name: "Turma", type: TYPES.NVarChar, value: Turma || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "PorcentagemAcertoIngles", type: TYPES.Int, value: PorcentagemAcertoIngles || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "CH", type: TYPES.Int, value: CH || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "CN", type: TYPES.Int, value: CN || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "LP", type: TYPES.Int, value: LP || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "MAT", type: TYPES.Int, value: MAT || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
 
-
-  ];
-  await executeQuery(query, params);  // Executa a query com os parâmetros
-}
-
-// Função para atualizar um usuário existente
-async function updateUser(rm, Ebep, ComDeficiencia, Turma, PorcentagemAcertoIngles, CH, CN, LP, MAT) {
-  const query = `UPDATE AvaliaSESI SET Ebep = @Ebep, ComDeficiencia = @ComDeficiencia, Turma = @Turma, PorcentagemAcertoIngles = @PorcentagemAcertoIngles, CH = @CH, CN = @CN, LP = @LP, MAT = @MAR=T WHERE rm = @rm;`;  // Query SQL para atualizar o registro
-  const params = [
-    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
-    { name: "Ebep", type: TYPES.Int, value: Ebep },  // Define o parâmetro @email
-    { name: "ComDeficiencia", type: TYPES.Int, value: ComDeficiencia || null },
-    { name: "Turma", type: TYPES.NVarChar, value: Turma || null },   // Define o parâmetro @age
-    { name: "PorcentagemAcertoIngles", type: TYPES.Int, value: PorcentagemAcertoIngles || null },  //
-    { name: "CH", type: TYPES.Int, value: CH || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "CN", type: TYPES.Int, value: CN || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "LP", type: TYPES.Int, value: LP || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "MAT", type: TYPES.Int, value: MAT || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-  ];
-  await executeQuery(query, params);  // Executa a query com os parâmetros
-}
-
-// Função para deletar um usuário pelo ID
-async function deleteUser(rm) {
-  const query = "DELETE FROM AvaliaSESI WHERE rm = @rm;";  // Query SQL para deletar o usuário pelo ID
-  const params = [{ name: "rm", type: TYPES.Int, value: rm }];  // Define o parâmetro @id
-  await executeQuery(query, params);  // Executa a query com o parâmetro
-}
 
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
   getAllUsers,
   getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
 };

@@ -45,7 +45,7 @@ router.get("/avalia", AvaliaController.getUsers);
 
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
-router.get("/avalia/:RM", AvaliaController.getUser);
+router.get("/avalia/:rm", AvaliaController.getUser);
 
 // Rota POST para criar um novo usuário
 // Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
@@ -53,11 +53,11 @@ router.post("/avalia/", AvaliaController.createUser);
 
 // Rota PUT para atualizar um usuário existente pelo ID
 // Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/avalia/:RM", AvaliaController.updateUser);
+router.put("/avalia/:rm", AvaliaController.updateUser);
 
 // Rota DELETE para deletar um usuário específico pelo ID
 // Chama o método "deleteUser" do controller ao acessar "/users/:id"
-router.delete("avalia/:RM", AvaliaController.deleteUser);
+router.delete("avalia/:rm", AvaliaController.deleteUser);
 
 //
 
@@ -75,19 +75,8 @@ router.get("/avaliasesi", AvaliaSESIController .getUsers);
 
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
-router.get("/avaliasesi/:RM", AvaliaSESIController .getUser);
+router.get("/avaliasesi/:rm", AvaliaSESIController .getUser);
 
-// Rota POST para criar um novo usuário
-// Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
-router.post("/avaliasesi", AvaliaSESIController .createUser);
-
-// Rota PUT para atualizar um usuário existente pelo ID
-// Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/avaliasesi/:RM", AvaliaSESIController .updateUser);
-
-// Rota DELETE para deletar um usuário específico pelo ID
-// Chama o método "deleteUser" do controller ao acessar "/users/:id"
-router.delete("/avaliasesi/:RM", AvaliaSESIController .deleteUser);
 
 //
 
@@ -104,19 +93,8 @@ router.get("/cursotec", CursoTecController.getUsers);
 
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
-router.get("/cursotec/:RM", CursoTecController.getUser);
+router.get("/cursotec/:rm", CursoTecController.getUser);
 
-// Rota POST para criar um novo usuário
-// Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
-router.post("/cursotec", CursoTecController.createUser);
-
-// Rota PUT para atualizar um usuário existente pelo ID
-// Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/cursotec/:RM", CursoTecController.updateUser);
-
-// Rota DELETE para deletar um usuário específico pelo ID
-// Chama o método "deleteUser" do controller ao acessar "/users/:id"
-router.delete("/cursotec/:RM", CursoTecController.deleteUser);
 
 //
 
@@ -136,17 +114,6 @@ router.get("/notasEF1", NotasEF1Controller.getUsers);
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
 router.get("/notasEF1/:RM", NotasEF1Controller.getUser);
 
-// Rota POST para criar um novo usuário
-// Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
-router.post("/notasEF1", NotasEF1Controller.createUser);
-
-// Rota PUT para atualizar um usuário existente pelo ID
-// Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/notasEF1/:RM",NotasEF1Controller.updateUser);
-
-// Rota DELETE para deletar um usuário específico pelo ID
-// Chama o método "deleteUser" do controller ao acessar "/users/:id"
-router.delete("/notasEF1/:RM", NotasEF1Controller.deleteUser);
 
 //
 
@@ -168,17 +135,7 @@ router.get("/notasEF2", NotasEF2Controller.getUsers);
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
 router.get("/notasEF2/:RM", NotasEF2Controller.getUser);
 
-// Rota POST para criar um novo usuário
-// Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
-router.post("/notasEF2", NotasEF2Controller.createUser);
 
-// Rota PUT para atualizar um usuário existente pelo ID
-// Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/notasEF2/:RM", NotasEF2Controller.updateUser);
-
-// Rota DELETE para deletar um usuário específico pelo ID
-// Chama o método "deleteUser" do controller ao acessar "/users/:id"
-router.delete("/notasEF2/:RM", NotasEF2Controller.deleteUser);
 
 //
 
@@ -198,21 +155,11 @@ router.get("/notasEM", NotasEMController.getUsers);
 
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
-router.get("/notasEM/:RM", NotasEMController.getUser);
-
-// Rota POST para criar um novo usuário
-// Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
-router.post("/notasEM",NotasEMController.createUser);
-
-// Rota PUT para atualizar um usuário existente pelo ID
-// Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/notasEM/:RM", NotasEMController.updateUser);
-
-// Rota DELETE para deletar um usuário específico pelo ID
-// Chama o método "deleteUser" do controller ao acessar "/users/:id"
-router.delete("/NotasEM/:RM", NotasEMController.deleteUser);
+router.get("/notasEM/:rm", NotasEMController.getUser);
 
 
+
+module.exports = router;
 
 
 

@@ -43,10 +43,10 @@ async function getUser(req, res) {
 // Função para criar um novo usuário
 async function createUser(req, res) {
   // Extrai as informações do novo usuário a partir do corpo da requisição (name, email, age)
-  const { NomeAluno, Turma, Ano } = req.body;
+  const { RM, NomeAluno, Turma, Ano } = req.body;
   try {
     // Chama o método do modelo para criar o novo usuário com os dados fornecidos
-    await userModel.createUser(NomeAluno, Turma, Ano );
+    await userModel.createUser(RM, NomeAluno, Turma, Ano );
     
     // Retorna um status 201 (criado com sucesso)
     res.status(201).send("Usuário criado com sucesso");

@@ -67,28 +67,28 @@ async function getUserById(rm) {
 }
 
 // Função para criar um novo usuário
-async function createUser(rm, etapa, ano, tipoprova, nota) {
-  const query = `INSERT INTO AvaliaExt (rm, etapa, ano, tipoprova, nota) VALUES (@rm, @etapa, @ano, @tipoprova, @nota);`;  // Query SQL para inserir um novo registro
+async function createUser(rm, etapa, ano, tipoprova, notaExt) {
+  const query = `INSERT INTO AvaliaExt (rm, etapa, ano, tipoprova, notaExt) VALUES (@rm, @etapa, @ano, @tipoprova, @notaExt);`;  // Query SQL para inserir um novo registro
   const params = [
     { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
     { name: "etapa", type: TYPES.Int, value: etapa },  // Define o parâmetro @email
     { name: "ano", type: TYPES.Int, value: ano || null },
     { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "nota", type: TYPES.Int, value: nota || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
+    { name: "notaExt", type: TYPES.Int, value: notaExt || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
 
   ];
   await executeQuery(query, params);  // Executa a query com os parâmetros
 }
 
 // Função para atualizar um usuário existente
-async function updateUser(rm, etapa, ano, tipoprova, nota) {
-  const query = `UPDATE AvaliaExt SET etapa = @etapa, ano = @ano, tipoprova = @tipoprova, nota = @nota WHERE rm = @rm;`;  // Query SQL para atualizar o registro
+async function updateUser(rm, etapa, ano, tipoprova, notaExt) {
+  const query = `UPDATE AvaliaExt SET etapa = @etapa, ano = @ano, tipoprova = @tipoprova, notaExt = @notaExt WHERE rm = @rm;`;  // Query SQL para atualizar o registro
   const params = [
     { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
     { name: "etapa", type: TYPES.Int, value: etapa },  // Define o parâmetro @email
-    { name: "ano", type: TYPES.Int, value: ano || null },
+    { name: "ano", type: TYPES.Int, value: ano },
     { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova || null },   // Define o parâmetro @age
-    { name: "nota", type: TYPES.Int, value: nota || null },  //
+    { name: "notaExt", type: TYPES.Decimal, value: notaExt},  //
   ];
   await executeQuery(query, params);  // Executa a query com os parâmetros
 }

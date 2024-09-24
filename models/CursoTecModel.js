@@ -66,49 +66,8 @@ async function getUserById(rm) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
-// Função para criar um novo usuário
-async function createUser(rm, nome, frequencia, nota, ano, etapa) {
-  const query = `INSERT INTO CursoTec (rm, nome, frequencia, nota, ano, etapa) VALUES (@rm, @nome, @frequencia, @nota, @ano, @etapa);`;  // Query SQL para inserir um novo registro
-  const params = [
-    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
-    { name: "nome", type: TYPES.Int, value: nome },  // Define o parâmetro @email
-    { name: "frequencia", type: TYPES.Int, value: frequencia || null },
-    { name: "nota", type: TYPES.NVarChar, value: nota || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "ano", type: TYPES.Int, value: ano || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "etapa", type: TYPES.Int, value: etapa || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-
-
-  ];
-  await executeQuery(query, params);  // Executa a query com os parâmetros
-}
-
-// Função para atualizar um usuário existente
-async function updateUser(rm, nome, frequencia, nota, ano, etapa) {
-  const query = `UPDATE CursoTec SET nome = @nome, frequencia = @frequencia, nota = @nota, ano = @ano, etapa = @etapa WHERE rm = @rm;`;  // Query SQL para atualizar o registro
-  const params = [
-    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
-    { name: "nome", type: TYPES.Int, value: nome },  // Define o parâmetro @email
-    { name: "frequencia", type: TYPES.Int, value: frequencia || null },
-    { name: "nota", type: TYPES.NVarChar, value: nota || null },   // Define o parâmetro @age
-    { name: "ano", type: TYPES.Int, value: ano || null },  //
-    { name: "etapa", type: TYPES.Int, value: etapa || null },  //
-
-  ];
-  await executeQuery(query, params);  // Executa a query com os parâmetros
-}
-
-// Função para deletar um usuário pelo ID
-async function deleteUser(rm) {
-  const query = "DELETE FROM CursoTec WHERE rm = @rm;";  // Query SQL para deletar o usuário pelo ID
-  const params = [{ name: "rm", type: TYPES.Int, value: rm }];  // Define o parâmetro @id
-  await executeQuery(query, params);  // Executa a query com o parâmetro
-}
-
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
   getAllUsers,
   getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
 };

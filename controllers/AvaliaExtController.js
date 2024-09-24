@@ -1,7 +1,7 @@
 // controllers/usersController.js
 
 // Importa o modelo de usuário que contém a lógica de interação com o banco de dados
-const userModel = require("../models/AlunosGeralModel");
+const userModel = require("../models/AvaliaExtModel");
 
 // Função para obter todos os usuários
 async function getUsers(req, res) {
@@ -24,7 +24,7 @@ async function getUser(req, res) {
   const rm = req.params.rm;
   try {
     // Chama o método do modelo para obter o usuário com base no ID fornecido
-    const user = await userModel.getUserById(RM);
+    const user = await userModel.getUserById(rm);
     
     // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
     if (!user) {
@@ -43,10 +43,10 @@ async function getUser(req, res) {
 // Função para criar um novo usuário
 async function createUser(req, res) {
   // Extrai as informações do novo usuário a partir do corpo da requisição (name, email, age)
-  const { rm,etapa, ano,tipoprova, notaExt } = req.body;
+  const { rm, etapa, ano, tipoprova, notaExt } = req.body;
   try {
     // Chama o método do modelo para criar o novo usuário com os dados fornecidos
-    await userModel.createUser(rm, etapa, ano,tipoprova, notaExt );
+    await userModel.createUser(rm, etapa, ano, tipoprova, notaExt );
     
     // Retorna um status 201 (criado com sucesso)
     res.status(201).send("Usuário criado com sucesso");
@@ -61,10 +61,10 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
   // Extrai o ID do usuário da URL e os novos dados do corpo da requisição
   const rm = req.params.rm;
-  const {etapa, ano,tipoprova, notaExt } = req.body;
+  const {etapa, ano, tipoprova, notaExt } = req.body;
   try {
     // Chama o método do modelo para atualizar o usuário com base no ID e nos dados fornecidos
-    await userModel.updateUser(etapa, ano,tipoprova, notaExt );
+    await userModel.updateUser(rm, etapa, ano, tipoprova, notaExt );
     
     // Retorna uma mensagem de sucesso após a atualização
     res.send("Usuário atualizado com sucesso");
