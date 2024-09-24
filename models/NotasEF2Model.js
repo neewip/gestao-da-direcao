@@ -1,86 +1,74 @@
-// models/clienteModel.js
-const { Connection, Request } = require('tedious');
-const config = require('../config/dbconfig'); // Importa diretamente
-//o objeto de configuração
-// Função auxiliar para executar uma consulta SQL
-function executeSQL(sql, callback) {
-  const connection = new Connection(config);
-  connection.on('connect', err => {
-    if (err) {
-      console.error('Erro de conexão:', err);
-      callback(err, null);
-      return;
-    }
-    const request = new Request(sql, (err, rowCount) => {
+// models/userModel.js
+
+// Importa o Request e os tipos de dados (TYPES) do pacote "tedious" para criar e executar consultas SQL
+const { Request, TYPES } = require("tedious");
+
+// Importa a função que conecta ao banco de dados
+const connectDatabase = require("../database/connection");
+
+// Função genérica para executar uma query SQL
+async function executeQuery(query, params = []) {
+  // Estabelece uma conexão com o banco de dados
+  const connection = await connectDatabase();
+  
+  // Retorna uma Promise para lidar com a execução assíncrona da query
+  return new Promise((resolve, reject) => {
+    // Cria uma nova requisição SQL com a query passada e um callback para erros
+    const request = new Request(query, (err) => {
       if (err) {
-        console.error('Erro ao executar a consulta:', err);
-        return;
-      }
-      if (rowCount === 0) {
-
-        callback(null, []); // Se não há linhas, retorna um
-
-        //array vazio
-
-        return;
+        // Se ocorrer um erro, a Promise é rejeitada e a conexão é fechada
+        reject(err);
+        connection.close();
       }
     });
-    let clientes = [];
-    request.on('row', columns => {
-      let cliente = {};
-      columns.forEach(column => {
-        cliente[column.metadata.colName] = column.value;
+
+    // Adiciona parâmetros à requisição SQL (nome, tipo e valor)
+    params.forEach(({ name, type, value }) => {
+      request.addParameter(name, type, value);
+    });
+
+    // Array para armazenar os resultados retornados pela query
+    let results = [];
+
+    // Evento "row" é disparado para cada linha retornada pela query
+    request.on("row", (columns) => {
+      // Cria um objeto para cada linha e armazena suas colunas e valores
+      let row = {};
+      columns.forEach((column) => {
+        row[column.metadata.colName] = column.value;
       });
-      clientes.push(cliente);
+      results.push(row);
     });
-    request.on('requestCompleted', () => {
-      callback(null, clientes); // Retorna o array de clientes
-    });
-    request.on('error', err => {
-      console.error('Erro durante a requisição:', err);
-      callback(err, null);
-    });
-    request.on('done', () => {
-      connection.close(); // Garante que a conexão seja fechada
 
-      //após completar ou errar
+    // Evento "requestCompleted" é disparado quando a query é completamente executada
+    request.on("requestCompleted", () => {
+      // Fecha a conexão com o banco de dados e resolve a Promise com os resultados
+      connection.close();
+      resolve(results);
     });
+
+    // Executa a requisição SQL
     connection.execSql(request);
   });
-  connection.connect();
 }
-// Lista todos os clientes
-exports.findAll = (callback) => {
-  const sql = "SELECT * FROM Clientes";
-  executeSQL(sql, callback);
-};
-// Busca um cliente pelo ID
-exports.findById = (id, callback) => {
-  const sql = `SELECT * FROM Clientes WHERE ID = ${id}`;
-  executeSQL(sql, (err, clientes) => {
-    if (err) {
-      callback(err, null);
-    } else {
 
-      // Verifica se a consulta retornou algum cliente
-      const cliente = clientes.length > 0 ? clientes[0] : null;
-      callback(null, cliente);
-    }
-  });
-};
-// Cria um novo cliente
-exports.create = (cliente, callback) => {
-  const sql = `INSERT INTO NotasEF1 (RM, [1EtapaCN],	[2EtapaCN],	[3EtapaCN],	NotaFinalCN,	[1EtapaMAT],	[2EtapaMAT],	[3EtapaMAT],	NotaFinalMAT,	[1EtapaLP],	[2EtapaLP],	[3EtapaLP],	NotaFinalLP,	[1EtapaAR],	[2EtapaAR],	[3EtapaAR],	NotaFinalAR,	[1EtapaEF],	[2EtapaEF],	[3EtapaEF],	NotaFinalEF,	[1EtapaHIS],	[2EtapaHIS],	[3EtapaHIS],	NotaFinalHIS,	[1EtapaGEO],	[2EtapaGEO], [3EtapaGEO],	NotaFinalGEO,	[1EtapaLI],	[2EtapaLI],	[3EtapaLI],	NotaFinalLI,	[1EtapaEIXO],	[2EtapaEIXO],	[3EtapaEIXO],	NotaFinalEIXO,	[1EtapaPR],	[2EtapaPR],	[3EtapaPR], NotaFinalPR) VALUES
-('${cliente.RM}', '${cliente['1EtapaCN']}','${cliente['2EtapaCN']}, '${cliente['3EtapaCN']}, '${cliente.NotaFinalCN}', '${cliente['1EtapaMAT']}, '${cliente['2EtapaMAT']}, '${cliente['3EtapaMAT']}, '${cliente.NotaFinalLP}', '${cliente['1EtapaAR']}, '${cliente['2EtapaAR']}, '${cliente['3EtapaAR']}, '${cliente.NotaFinalAR}', '${cliente['1EtapaEF']}, '${cliente['2EtapaEF']}, '${cliente['3EtapaEF']}, '${cliente.NotaFinalEF}'),  '${cliente['1EtapaHIS']}, '${cliente['2EtapaHIS']}, '${cliente['3EtapaHIS']}, '${cliente.NotaFinalHIS}'), '${cliente['1EtapaGEO']}, '${cliente['2EtapaGEO']}, '${cliente['3EtapaGEO']}, '${cliente.NotaFinalGEO}'), '${cliente['1EtapaLI']}, '${cliente['2EtapaLI']}, '${cliente['3EtapaLI']}, '${cliente.NotaFinalLI}'), '${cliente['1EtapaEIXO']}, '${cliente['2EtapaEIXO']}, '${cliente['3EtapaEIXO']}, '${cliente.NotaFinalEIXO}'), '${cliente['1EtapaPR']}, '${cliente['2EtapaPR']}, '${cliente['3EtapaPR']}, '${cliente.NotaFinalPR}') `;
-  executeSQL(sql, callback);
-};
-// Atualiza um cliente pelo ID
-exports.update = (RM, cliente, callback) => {
-  const sql = `UPDATE NotasEF1 SET RM = '${cliente.RM}', [1EtapaCN] = '${cliente['1EtapaCN']}', [2EtapaCN] = '${cliente['2EtapaCN']},  [3EtapaCN] = '${cliente['3EtapaCN']},  NotaFinalCN = '${cliente.NotaFinalCN}', [1EtapaMAT] = '${cliente['1EtapaMAT']}, [2EtapaMAT] = '${cliente['2EtapaMAT']}, [3EtapaMAT] = '${cliente['3EtapaMAT']}, NotaFinalMAT = '${cliente.NotaFinalMAT}', [1EtapaLP] = '${cliente['1EtapaLP']}, [2EtapaLP] = '${cliente['2EtapaLP']}, [3EtapaLP] = '${cliente['3EtapaLP']}, NotaFinalLP = '${cliente.NotaFinalLP}', [1EtapaAR] = '${cliente['1EtapaAR']}, [2EtapaAR] = '${cliente['2EtapaAR']}, [3EtapaAR] = '${cliente['3EtapaAR']}, NotaFinalAR = '${cliente.NotaFinalAR}', [1EtapaEF] = '${cliente['1EtapaEF']}, [2EtapaEF] = '${cliente['2EtapaEF']}, [3EtapaEF] = '${cliente['3EtapaEF']}, NotaFinalEF = '${cliente.NotaFinalEF}'), [1EtapaHIS] = '${cliente['1EtapaHIS']}, [2EtapaHIS] = '${cliente['2EtapaHIS']}, [3EtapaHIS] = '${cliente['3EtapaHIS']}, NotaFinalHIS = '${cliente.NotaFinalHIS}'), [1EtapaGEO] = '${cliente['1EtapaGEO']}, [2EtapaGEO] = '${cliente['2EtapaGEO']}, [3EtapaGEO] = '${cliente['3EtapaGEO']}, NotaFinalGEO = '${cliente.NotaFinalGEO}'), [1EtapaLI] = '${cliente['1EtapaLI']}, [2EtapaLI] = '${cliente['2EtapaLI']}, [3EtapaLI] = '${cliente['3EtapaLI']}, NotaFinalLI = '${cliente.NotaFinalLI}'), [1EtapaEIXO] = '${cliente['1EtapaEIXO']}, [2EtapaEIXO] = '${cliente['2EtapaEIXO']}, [3EtapaEIXO] = '${cliente['3EtapaEIXO']}, NotaFinalEIXO = '${cliente.NotaFinalEIXO}'), [1EtapaPR] = '${cliente['1EtapaPR']},  [2EtapaPR] = '${cliente['2EtapaPR']},  [3EtapaPR] = '${cliente['3EtapaPR']}, NotaFinalPR = '${cliente.NotaFinalPR}') WHERE RM = ${RM}`;
-  executeSQL(sql, callback);
-};
-// Exclui um cliente pelo RM
-exports.delete = (RM, callback) => {
-  const sql = `DELETE FROM NotasEF2 WHERE RM = ${RM}`;
-  executeSQL(sql, callback);
+// Função para obter todos os usuários do banco de dados
+async function getAllUsers() {
+  const query = "SELECT * FROM NotasEF2;";  // Define a query SQL para obter todos os registros da tabela "Users"
+  return await executeQuery(query);  // Executa a query usando a função executeQuery
+}
+
+// Função para obter um usuário pelo ID
+async function getUserById(RM) {
+  const query = "SELECT * FROM NotasEF2 WHERE RM = @RM";  // Query SQL com um parâmetro para filtrar pelo ID
+  const params = [{ name: "RM", type: TYPES.Int, value: RM }];  // Define o parâmetro @id para ser passado na query
+  const users = await executeQuery(query, params);  // Executa a query com os parâmetros
+  return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
+}
+
+
+// Exporta as funções para serem usadas nos controllers
+module.exports = {
+  getAllUsers,
+  getUserById,
 };
