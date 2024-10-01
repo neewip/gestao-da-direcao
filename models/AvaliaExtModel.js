@@ -100,6 +100,22 @@ async function deleteUser(rm) {
   await executeQuery(query, params);  // Executa a query com o parâmetro
 }
 
+async function getUserByFilter(etapa, Turma, ano) {
+  etapa = parseInt(etapa, 10); // Parse etapa as an integer
+  const query = "select * from AvaliaExtFilter where etapa = @etapa and Turma LIKE @Turma AND ano = @ano";
+  const params = [
+    { name: "etapa", type: TYPES.Int, value: etapa },
+    { name: "Turma", type: TYPES.VarChar, value: Turma },
+    { name: "ano", type: TYPES.Int, value: ano },
+  ];
+  const users = await executeQuery(query, params);
+  return users;
+}
+
+
+
+
+
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
   getAllUsers,
@@ -107,4 +123,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  getUserByFilter,
 };

@@ -97,6 +97,18 @@ async function deleteUser(RM) {
   await executeQuery(query, params);  // Executa a query com o parâmetro
 }
 
+async function getUserByFilter(Turma, ano) {
+  const query = "select * from AlunosGeral WHERE Turma LIKE @Turma AND ano = @ano";
+  const params = [
+    { name: "Turma", type: TYPES.VarChar, value: Turma },
+    { name: "ano", type: TYPES.Int, value: ano },
+    
+  ];
+  const users = await executeQuery(query, params);
+  return users;
+}
+
+
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
   getAllUsers,
@@ -104,4 +116,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  getUserByFilter,
 };

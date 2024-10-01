@@ -29,6 +29,10 @@ router.put("/alunos/:RM", GeralController.updateUser);
 // Chama o método "deleteUser" do controller ao acessar "/users/:id"
 router.delete("/alunos/:RM", GeralController.deleteUser);
 
+
+router.get("/alunos/:Turma/:ano", GeralController.getUserByFilter);
+
+
 //
 
 
@@ -58,6 +62,11 @@ router.put("/avalia/:rm", AvaliaController.updateUser);
 // Rota DELETE para deletar um usuário específico pelo ID
 // Chama o método "deleteUser" do controller ao acessar "/users/:id"
 router.delete("avalia/:rm", AvaliaController.deleteUser);
+
+
+
+router.get("/avalia/:etapa/:Turma/:ano", AvaliaController.getUserByFilter);
+
 
 //
 
@@ -96,6 +105,10 @@ router.get("/cursotec", CursoTecController.getUsers);
 router.get("/cursotec/:rm", CursoTecController.getUser);
 
 
+router.get("/cursotec/:etapa/:Turma/:ano", CursoTecController.getUserByFilter);
+
+
+
 //
 
 
@@ -114,6 +127,8 @@ router.get("/notasEF1", NotasEF1Controller.getUsers);
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
 router.get("/notasEF1/:RM", NotasEF1Controller.getUser);
 
+
+router.get("/notasEF1/:etapa/:Turma/:Ano", NotasEF1Controller.getUserByFilter);
 
 //
 
@@ -136,6 +151,9 @@ router.get("/notasEF2", NotasEF2Controller.getUsers);
 router.get("/notasEF2/:RM", NotasEF2Controller.getUser);
 
 
+router.get("/notasEF2/:etapa/:Turma/:Ano", NotasEF2Controller.getUserByFilter);
+
+
 
 //
 
@@ -156,6 +174,45 @@ router.get("/notasEM", NotasEMController.getUsers);
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
 router.get("/notasEM/:rm", NotasEMController.getUser);
+
+
+
+router.get("/notasEM/:etapa/:Turma/:Ano", NotasEMController.getUserByFilter);
+
+//
+
+
+const TabelaGeralEFUM = require("../controllers/TabelaGeralEFUMController");
+
+// Rota GET para obter todos os usuários
+// Chama o método "getUsers" do controller quando a rota raiz "/users" for acessada
+router.get("/tabelageralef1", TabelaGeralEFUM.getUsers);
+
+// Rota GET para obter um usuário específico pelo ID
+// Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
+router.get("/tabelageralef1/:RM", TabelaGeralEFUM.getUser);
+
+
+
+router.get("/tabelageralef1/:Turma/:Ano", TabelaGeralEFUM.getUserByFilter);
+
+
+//
+
+
+const TabelaGeralEFDOIS = require("../controllers/TabelaGeralEFDOISController");
+
+// Rota GET para obter todos os usuários
+// Chama o método "getUsers" do controller quando a rota raiz "/users" for acessada
+router.get("/tabelageralef2", TabelaGeralEFDOIS.getUsers);
+
+// Rota GET para obter um usuário específico pelo ID
+// Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
+router.get("/tabelageralef2/:RM", TabelaGeralEFDOIS.getUser);
+
+
+
+router.get("/tabelageralef2/:Turma/:Ano", TabelaGeralEFDOIS.getUserByFilter);
 
 
 

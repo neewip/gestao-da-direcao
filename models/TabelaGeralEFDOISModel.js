@@ -54,47 +54,29 @@ async function executeQuery(query, params = []) {
 
 // Função para obter todos os usuários do banco de dados
 async function getAllUsers() {
-  const query = "SELECT * FROM NotasEF1;";  // Define a query SQL para obter todos os registros da tabela "Users"
+  const query = "SELECT * FROM TabelaGeralEFDOIS;";  // Define a query SQL para obter todos os registros da tabela "Users"
   return await executeQuery(query);  // Executa a query usando a função executeQuery
 }
 
 // Função para obter um usuário pelo ID
 async function getUserById(RM) {
-  const query = "SELECT * FROM NotasEF1 WHERE RM = @RM";  // Query SQL com um parâmetro para filtrar pelo ID
+  const query = "SELECT * FROM TabelaGeralEFDOIS WHERE RM = @RM";  // Query SQL com um parâmetro para filtrar pelo ID
   const params = [{ name: "RM", type: TYPES.Int, value: RM }];  // Define o parâmetro @id para ser passado na query
   const users = await executeQuery(query, params);  // Executa a query com os parâmetros
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
+async function getUserByFilter(Turma, Ano) {
+    const query = "select * from TabelaGeralEFDOIS WHERE Turma LIKE @Turma AND Ano = @Ano";
+    const params = [
+      { name: "Turma", type: TYPES.VarChar, value: Turma },
+      { name: "Ano", type: TYPES.Int, value: Ano },
+      
+    ];
+    const users = await executeQuery(query, params);
+    return users;
 
-async function getUserByFilter(etapa, Turma, Ano) {
-  console.log('Valor de etapa:', etapa);
-  console.log('Valor de Turma:', Turma);
-  console.log('Valor de Ano:', Ano);
-
-  Ano = parseInt(Ano); // Parse etapa as an integer
-  const query = `
-    DECLARE @word NVARCHAR(50) = '${etapa}';
-    DECLARE @column_list NVARCHAR(MAX) = (
-        SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE table_name = 'NotasEF1Filter'
-        AND column_name LIKE @word + '%'
-        FOR XML PATH('')
-    );
-
-    SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
-
-    DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno,' + @column_list + ' FROM NotasEF1Filter where Turma LIKE ''${Turma}'' and Ano = ${Ano};'
-    EXEC sp_executesql @sql;
-  `;
-
-  console.log('Query:', query);
-
-  const users = await executeQuery(query);
-  console.log('Resultado:', users);
-  return users;
-}
+  }
 
 // Exporta as funções para serem usadas nos controllers
 module.exports = {

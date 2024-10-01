@@ -1,7 +1,7 @@
 // controllers/usersController.js
 
 // Importa o modelo de usuário que contém a lógica de interação com o banco de dados
-const userModel = require("../models/CursoTecModel");
+const userModel = require("../models/TabelaGeralEFUMModel");
 
 // Função para obter todos os usuários
 async function getUsers(req, res) {
@@ -21,7 +21,7 @@ async function getUsers(req, res) {
 // Função para obter um usuário específico pelo ID
 async function getUser(req, res) {
   // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
-  const rm = req.params.rm;
+  const rm = req.params.RM;
   try {
     // Chama o método do modelo para obter o usuário com base no ID fornecido
     const user = await userModel.getUserById(rm);
@@ -40,32 +40,29 @@ async function getUser(req, res) {
   }
 }
 
-
 async function getUserByFilter(req, res) {
-  // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
-  const etapa = req.params.etapa;
-  const turma = req.params.Turma;
-  const ano = req.params.ano;
-
-  try {
-    // Chama o método do modelo para obter o usuário com base no ID fornecido
-    const user = await userModel.getUserByFilter(etapa, turma, ano);
-    
-
-    
-    // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
-    if (!user) {
-      res.status(404).send("Usuário não encontrado");
-    } else {
-      // Se o usuário for encontrado, retorna os dados em formato JSON
-      res.json(user);
+    // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
+    const turma = req.params.Turma;
+    const ano = req.params.Ano;
+  
+    try {
+      // Chama o método do modelo para obter o usuário com base no ID fornecido
+      const user = await userModel.getUserByFilter(turma, ano);
+  
+      
+      // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
+      if (!user) {
+        res.status(404).send("Usuário não encontrado");
+      } else {
+        // Se o usuário for encontrado, retorna os dados em formato JSON
+        res.json(user);
+      }
+    } catch (err) {
+      // Exibe o erro no console e retorna uma resposta com status 500
+      console.error(err.message);
+      res.status(500).send("Erro ao obter o usuário");
     }
-  } catch (err) {
-    // Exibe o erro no console e retorna uma resposta com status 500
-    console.error(err.message);
-    res.status(500).send("Erro ao obter o usuário");
   }
-}
 
 // Exporta as funções do controller para serem usadas nas rotas da aplicação
 module.exports = {

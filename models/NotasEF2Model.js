@@ -66,9 +66,40 @@ async function getUserById(RM) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
+async function getUserByFilter(etapa, Turma, Ano) {
+  console.log('Valor de etapa:', etapa);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
+
+  Ano = parseInt(Ano); // Parse etapa as an integer
+  const query = `
+    DECLARE @word NVARCHAR(50) = '${etapa}';
+    DECLARE @column_list NVARCHAR(MAX) = (
+        SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE table_name = 'NotasEF2Filter'
+        AND column_name LIKE @word + '%'
+        FOR XML PATH('')
+    );
+
+    SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
+
+    DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno,' + @column_list + ' FROM NotasEF2Filter where Turma LIKE ''${Turma}'' and Ano = ${Ano};'
+    EXEC sp_executesql @sql;
+  `;
+
+  console.log('Query:', query);
+
+  const users = await executeQuery(query);
+  console.log('Resultado:', users);
+  return users;
+}
+
+
 
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
   getAllUsers,
   getUserById,
+  getUserByFilter,
 };
