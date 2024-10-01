@@ -215,6 +215,25 @@ router.get("/tabelageralef2/:RM", TabelaGeralEFDOIS.getUser);
 router.get("/tabelageralef2/:Turma/:Ano", TabelaGeralEFDOIS.getUserByFilter);
 
 
+//
+
+
+const TabelaGeralEM = require("../controllers/TabelaGeralEMController");
+
+// Rota GET para obter todos os usuários
+// Chama o método "getUsers" do controller quando a rota raiz "/users" for acessada
+router.get("/tabelageralem", TabelaGeralEM.getUsers);
+
+// Rota GET para obter um usuário específico pelo ID
+// Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
+router.get("/tabelageralem/:RM", TabelaGeralEM.getUser);
+
+
+
+router.get("/tabelageralem/:Turma/:Ano", TabelaGeralEM.getUserByFilter);
+
+
+
 
 module.exports = router;
 
