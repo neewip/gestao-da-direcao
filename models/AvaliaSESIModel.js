@@ -67,9 +67,39 @@ async function getUserById(rm) {
 }
 
 
+async function getUserByFilter(etapa, Turma, Ano) {
+  console.log('Valor de etapa:', etapa);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
+
+  Ano = parseInt(Ano);
+  const query = `
+    DECLARE @word NVARCHAR(50) = '${etapa}';
+DECLARE @column_list NVARCHAR(MAX) = (
+    SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE table_name = 'AvaliaSESIFilter'
+    AND column_name LIKE @word + '%'
+    FOR XML PATH('')
+);
+
+SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
+
+DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno,' + @column_list + ' FROM AvaliaSESIFilter where Turma LIKE ''${Turma}'' and Ano = ${Ano};'
+EXEC sp_executesql @sql;
+  `;
+
+  console.log('Query:', query);
+
+  const users = await executeQuery(query);
+  console.log('Resultado:', users);
+  return users;
+}
+
 
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
+  getUserByFilter,
   getAllUsers,
   getUserById,
 };
