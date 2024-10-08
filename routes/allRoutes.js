@@ -131,7 +131,7 @@ router.get("/notasEF1", NotasEF1Controller.getUsers);
 router.get("/notasEF1/:RM", NotasEF1Controller.getUser);
 
 
-router.get("/notasEF1/:etapa/:Turma/:Ano", NotasEF1Controller.getUserByFilter);
+router.get("/notasEF1/:Turma/:etapa/:Ano", NotasEF1Controller.getUserByFilter);
 
 //
 
@@ -154,7 +154,7 @@ router.get("/notasEF2", NotasEF2Controller.getUsers);
 router.get("/notasEF2/:RM", NotasEF2Controller.getUser);
 
 
-router.get("/notasEF2/:etapa/:Turma/:Ano", NotasEF2Controller.getUserByFilter);
+router.get("/notasEF2/:Turma/:etapa/:Ano", NotasEF2Controller.getUserByFilter);
 
 
 
@@ -180,7 +180,7 @@ router.get("/notasEM/:rm", NotasEMController.getUser);
 
 
 
-router.get("/notasEM/:etapa/:Turma/:Ano", NotasEMController.getUserByFilter);
+router.get("/notasEM/:Turma/:etapa/:Ano", NotasEMController.getUserByFilter);
 
 //
 
