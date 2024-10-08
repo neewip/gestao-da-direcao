@@ -22,9 +22,10 @@ async function getUsers(req, res) {
 async function getUser(req, res) {
   // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
   const rm = req.params.rm;
+  const ano = req.params.ano;
   try {
     // Chama o método do modelo para obter o usuário com base no ID fornecido
-    const user = await userModel.getUserById(rm);
+    const user = await userModel.getUserById(rm, ano);
     
     // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
     if (!user) {
@@ -61,7 +62,8 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
   // Extrai o ID do usuário da URL e os novos dados do corpo da requisição
   const rm = req.params.rm;
-  const {etapa, ano, tipoprova, notaExt } = req.body;
+  const ano = req.params.ano;
+  const {etapa, tipoprova, notaExt } = req.body;
   try {
     // Chama o método do modelo para atualizar o usuário com base no ID e nos dados fornecidos
     await userModel.updateUser(rm, etapa, ano, tipoprova, notaExt );

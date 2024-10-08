@@ -10,7 +10,7 @@ const connectDatabase = require("../database/connection");
 async function executeQuery(query, params = []) {
   // Estabelece uma conexão com o banco de dados
   const connection = await connectDatabase();
-  
+
   // Retorna uma Promise para lidar com a execução assíncrona da query
   return new Promise((resolve, reject) => {
     // Cria uma nova requisição SQL com a query passada e um callback para erros
@@ -59,18 +59,26 @@ async function getAllUsers() {
 }
 
 // Função para obter um usuário pelo ID
-async function getUserById(rm) {
-  const query = "SELECT * FROM AvaliaExt WHERE rm = @rm";  // Query SQL com um parâmetro para filtrar pelo ID
-  const params = [{ name: "rm", type: TYPES.Int, value: rm }];  // Define o parâmetro @id para ser passado na query
+async function getUserById(rm, ano) {
+  console.log('Valor de rm:', rm);
+  console.log('Valor de Ano:', ano);
+
+  const query = "SELECT * FROM AvaliaExt WHERE rm = @rm AND ano = @ano";  // Query SQL com um parâmetro para filtrar pelo ID
+  const params = [
+    { name: "rm", type: TYPES.Int, value: rm },
+    { name: "ano", type: TYPES.Int, value: ano }
+  ];  // Define o parâmetro @id para ser passado na query
   const users = await executeQuery(query, params);  // Executa a query com os parâmetros
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
+
+
 }
 
 // Função para criar um novo usuário
 async function createUser(rm, etapa, ano, tipoprova, notaExt) {
   const query = `INSERT INTO AvaliaExt (rm, etapa, ano, tipoprova, notaExt) VALUES (@rm, @etapa, @ano, @tipoprova, @notaExt);`;  // Query SQL para inserir um novo registro
   const params = [
-    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
+    { name: "rm", type: TYPES.Int, value: rm },  // Define o parâmetro @name
     { name: "etapa", type: TYPES.Int, value: etapa },  // Define o parâmetro @email
     { name: "ano", type: TYPES.Int, value: ano || null },
     { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
@@ -82,13 +90,13 @@ async function createUser(rm, etapa, ano, tipoprova, notaExt) {
 
 // Função para atualizar um usuário existente
 async function updateUser(rm, etapa, ano, tipoprova, notaExt) {
-  const query = `UPDATE AvaliaExt SET etapa = @etapa, ano = @ano, tipoprova = @tipoprova, notaExt = @notaExt WHERE rm = @rm;`;  // Query SQL para atualizar o registro
+  const query = `UPDATE AvaliaExt SET etapa = @etapa, ano = @ano, tipoprova = @tipoprova, notaExt = @notaExt WHERE rm = @rm AND ano = @ano;`;  // Query SQL para atualizar o registro
   const params = [
-    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
+    { name: "rm", type: TYPES.Int, value: rm },  // Define o parâmetro @name
     { name: "etapa", type: TYPES.Int, value: etapa },  // Define o parâmetro @email
     { name: "ano", type: TYPES.Int, value: ano },
     { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova || null },   // Define o parâmetro @age
-    { name: "notaExt", type: TYPES.Decimal, value: notaExt},  //
+    { name: "notaExt", type: TYPES.Decimal, value: notaExt },  //
   ];
   await executeQuery(query, params);  // Executa a query com os parâmetros
 }
