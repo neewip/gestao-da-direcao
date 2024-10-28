@@ -57,7 +57,7 @@ router.post("/avalia/", AvaliaController.createUser);
 
 // Rota PUT para atualizar um usuário existente pelo ID
 // Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/avalia/:rm/:ano", AvaliaController.updateUser);
+router.put("/avalia/:rm/:ano/:tipoprova", AvaliaController.updateUser);
 
 // Rota DELETE para deletar um usuário específico pelo ID
 // Chama o método "deleteUser" do controller ao acessar "/users/:id"
@@ -65,7 +65,7 @@ router.delete("avalia/:rm", AvaliaController.deleteUser);
 
 
 
-router.get("/avalia/:etapa/:Turma/:ano", AvaliaController.getUserByFilter);
+router.get("/avalia/:etapa/:Turma/:ano/:tipoprova", AvaliaController.getUserByFilter);
 
 
 //

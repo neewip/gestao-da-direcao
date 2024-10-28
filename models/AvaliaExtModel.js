@@ -80,9 +80,9 @@ async function createUser(rm, etapa, ano, tipoprova, notaExt) {
   const params = [
     { name: "rm", type: TYPES.Int, value: rm },  // Define o parâmetro @name
     { name: "etapa", type: TYPES.Int, value: etapa },  // Define o parâmetro @email
-    { name: "ano", type: TYPES.Int, value: ano || null },
-    { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
-    { name: "notaExt", type: TYPES.Int, value: notaExt || null },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
+    { name: "ano", type: TYPES.Int, value: ano },
+    { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
+    { name: "notaExt", type: TYPES.Decimal, value: notaExt },  // Define o parâmetro @age, sendo nulo caso não seja fornecido
 
   ];
   await executeQuery(query, params);  // Executa a query com os parâmetros
@@ -90,12 +90,12 @@ async function createUser(rm, etapa, ano, tipoprova, notaExt) {
 
 // Função para atualizar um usuário existente
 async function updateUser(rm, etapa, ano, tipoprova, notaExt) {
-  const query = `UPDATE AvaliaExt SET etapa = @etapa, ano = @ano, tipoprova = @tipoprova, notaExt = @notaExt WHERE rm = @rm AND ano = @ano;`;  // Query SQL para atualizar o registro
+  const query = `UPDATE AvaliaExt SET etapa = @etapa, ano = @ano, tipoprova = @tipoprova, notaExt = @notaExt WHERE rm = @rm AND ano = @ano and tipoprova = @tipoprova;`;  // Query SQL para atualizar o registro
   const params = [
     { name: "rm", type: TYPES.Int, value: rm },  // Define o parâmetro @name
     { name: "etapa", type: TYPES.Int, value: etapa },  // Define o parâmetro @email
     { name: "ano", type: TYPES.Int, value: ano },
-    { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova || null },   // Define o parâmetro @age
+    { name: "tipoprova", type: TYPES.NVarChar, value: tipoprova },   // Define o parâmetro @age
     { name: "notaExt", type: TYPES.Decimal, value: notaExt },  //
   ];
   await executeQuery(query, params);  // Executa a query com os parâmetros
@@ -108,13 +108,15 @@ async function deleteUser(rm) {
   await executeQuery(query, params);  // Executa a query com o parâmetro
 }
 
-async function getUserByFilter(etapa, Turma, ano) {
+async function getUserByFilter(etapa, Turma, ano, tipoprova) {
   etapa = parseInt(etapa, 10); // Parse etapa as an integer
-  const query = "select * from AvaliaExtFilter where etapa = @etapa and Turma LIKE @Turma AND ano = @ano";
+  const query = "select rm, NomeAluno, notaExt from AvaliaExtFilter where etapa = @etapa and Turma LIKE @Turma AND ano = @ano and tipoprova = @tipoprova";
   const params = [
     { name: "etapa", type: TYPES.Int, value: etapa },
     { name: "Turma", type: TYPES.VarChar, value: Turma },
     { name: "ano", type: TYPES.Int, value: ano },
+    { name: "tipoprova", type: TYPES.VarChar, value: tipoprova },
+
   ];
   const users = await executeQuery(query, params);
   return users;
