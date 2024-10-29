@@ -49,7 +49,7 @@ router.get("/avalia", AvaliaController.getUsers);
 
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
-router.get("/avalia/:rm/:ano", AvaliaController.getUser);
+router.get("/avalia/:RM/:Ano", AvaliaController.getUser);
 
 // Rota POST para criar um novo usuário
 // Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
@@ -197,7 +197,7 @@ router.get("/tabelageralef1/:RM", TabelaGeralEFUM.getUser);
 
 
 
-router.get("/tabelageralef1/:Turma/:Ano", TabelaGeralEFUM.getUserByFilter);
+router.get("/tabelageralef1/:etapa/:Turma/:Ano", TabelaGeralEFUM.getUserByFilter);
 
 
 //
@@ -215,8 +215,7 @@ router.get("/tabelageralef2/:RM", TabelaGeralEFDOIS.getUser);
 
 
 
-router.get("/tabelageralef2/:Turma/:Ano", TabelaGeralEFDOIS.getUserByFilter);
-
+router.get("/tabelageralef2/:etapa/:Turma/:Ano", TabelaGeralEFDOIS.getUserByFilter);
 
 //
 
@@ -233,7 +232,7 @@ router.get("/tabelageralem/:RM", TabelaGeralEM.getUser);
 
 
 
-router.get("/tabelageralem/:Turma/:Ano", TabelaGeralEM.getUserByFilter);
+router.get("/tabelageralem/:etapa/:Turma/:Ano", TabelaGeralEM.getUserByFilter);
 
 
 

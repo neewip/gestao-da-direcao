@@ -21,11 +21,11 @@ async function getUsers(req, res) {
 // Função para obter um usuário específico pelo ID
 async function getUser(req, res) {
   // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
-  const rm = req.params.rm;
-  const ano = req.params.ano;
+  const RM = req.params.RM;
+  const Ano = req.params.Ano;
   try {
     // Chama o método do modelo para obter o usuário com base no ID fornecido
-    const user = await userModel.getUserById(rm, ano);
+    const user = await userModel.getUserById(RM, Ano);
     
     // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
     if (!user) {

@@ -42,12 +42,18 @@ async function getUser(req, res) {
 
 async function getUserByFilter(req, res) {
     // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
-    const turma = req.params.Turma;
-    const ano = req.params.Ano;
+    const etapa = req.params.etapa;
+    const Turma = req.params.Turma;
+    const Ano = req.params.Ano;
+
+    console.log('Valor de etapac:', etapa);
+    console.log('Valor de Turmac:', Turma);
+    console.log('Valor de Anoc:', Ano);
+
   
     try {
       // Chama o método do modelo para obter o usuário com base no ID fornecido
-      const user = await userModel.getUserByFilter(turma, ano);
+      const user = await userModel.getUserByFilter(etapa, Turma, Ano);
   
       
       // Se o usuário não for encontrado, retorna um status 404 (não encontrado)

@@ -59,14 +59,14 @@ async function getAllUsers() {
 }
 
 // Função para obter um usuário pelo ID
-async function getUserById(rm, ano) {
-  console.log('Valor de rm:', rm);
-  console.log('Valor de Ano:', ano);
+async function getUserById(RM, Ano) {
+  console.log('Valor de RM:', RM);
+  console.log('Valor de Ano:', Ano);
 
-  const query = "SELECT * FROM AvaliaExtFilter WHERE rm = @rm AND ano = @ano";  // Query SQL com um parâmetro para filtrar pelo ID
+  const query = "SELECT * FROM AlunosGeral WHERE RM = @RM AND Ano = @Ano";  // Query SQL com um parâmetro para filtrar pelo ID
   const params = [
-    { name: "rm", type: TYPES.Int, value: rm },
-    { name: "ano", type: TYPES.Int, value: ano }
+    { name: "RM", type: TYPES.Int, value: RM },
+    { name: "Ano", type: TYPES.Int, value: Ano }
   ];  // Define o parâmetro @id para ser passado na query
   const users = await executeQuery(query, params);  // Executa a query com os parâmetros
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
