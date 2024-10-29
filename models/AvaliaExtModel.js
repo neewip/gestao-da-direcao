@@ -63,7 +63,7 @@ async function getUserById(rm, ano) {
   console.log('Valor de rm:', rm);
   console.log('Valor de Ano:', ano);
 
-  const query = "SELECT * FROM AvaliaExt WHERE rm = @rm AND ano = @ano";  // Query SQL com um parâmetro para filtrar pelo ID
+  const query = "SELECT * FROM AvaliaExtFilter WHERE rm = @rm AND ano = @ano";  // Query SQL com um parâmetro para filtrar pelo ID
   const params = [
     { name: "rm", type: TYPES.Int, value: rm },
     { name: "ano", type: TYPES.Int, value: ano }
