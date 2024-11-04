@@ -39,6 +39,26 @@ async function getUser(req, res) {
     res.status(500).send("Erro ao obter o usuário");
   }
 }
+async function getUserFilter(req, res) {
+  // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
+  const {rm, ano} = req.body;
+  try {
+    // Chama o método do modelo para obter o usuário com base no ID fornecido
+    const user = await userModel.getUserFilter(rm, ano);
+    
+    // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
+    if (!user) {
+      res.status(404).send("Usuário não encontrado");
+    } else {
+      // Se o usuário for encontrado, retorna os dados em formato JSON
+      res.json(user);
+    }
+  } catch (err) {
+    // Exibe o erro no console e retorna uma resposta com status 500
+    console.error(err.message);
+    res.status(500).send("Erro ao obter o usuário");
+  }
+}
 
 // Função para criar um novo usuário
 async function createUser(req, res) {
@@ -128,4 +148,5 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserByFilter,
+  getUserFilter
 };

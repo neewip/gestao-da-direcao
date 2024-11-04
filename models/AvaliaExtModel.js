@@ -58,10 +58,25 @@ async function getAllUsers() {
   return await executeQuery(query);  // Executa a query usando a função executeQuery
 }
 
+async function getUser() {
+  const query = "SELECT * FROM AvaliaExt WHERE rm = @rm, ano = @ano";  // Define a query SQL para obter todos os registros da tabela "Users"
+  return await executeQuery(query);  // Executa a query usando a função executeQuery
+}
+
 // Função para obter um usuário pelo ID
 async function getUserById(rm) {
   const query = "SELECT * FROM AvaliaExt WHERE rm = @rm";  // Query SQL com um parâmetro para filtrar pelo ID
   const params = [{ name: "rm", type: TYPES.Int, value: rm }];  // Define o parâmetro @id para ser passado na query
+  const users = await executeQuery(query, params);  // Executa a query com os parâmetros
+  return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
+}
+async function getUserFilter(rm, ano) {
+  const query = "SELECT * FROM AvaliaExtFilter WHERE rm = @rm, ano = @ano";  // Query SQL com um parâmetro para filtrar pelo ID
+  const params = [
+    { name: "rm", type: TYPES.Int, value: rm },
+    { name: "ano", type: TYPES.Int, value: ano }
+  
+  ];  // Define o parâmetro @id para ser passado na query
   const users = await executeQuery(query, params);  // Executa a query com os parâmetros
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
@@ -124,4 +139,6 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserByFilter,
+  getUser,
+  getUserFilter
 };
