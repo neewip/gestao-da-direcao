@@ -73,20 +73,34 @@ async function getUserByFilter(etapa, Turma, Ano) {
 
   Ano = parseInt(Ano); // Parse etapa as an integer
   const query = `
-    DECLARE @word NVARCHAR(50) = '${etapa}';
-    DECLARE @column_list NVARCHAR(MAX) = (
-        SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE table_name = 'TabelaGeralEFUM'
-        AND column_name LIKE @word + '%'
-        FOR XML PATH('')
-    );
+     
+   DECLARE @word NVARCHAR(50) = '${etapa}';
+      DECLARE @column_list NVARCHAR(MAX) = (
+          SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
+          FROM INFORMATION_SCHEMA.COLUMNS
+          WHERE table_name = 'TabelaGeralEFUM'
+          AND column_name LIKE @word + '%'
+          FOR XML PATH('')
+      );
+  
+      SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
+  
+      DECLARE @sql NVARCHAR(MAX) = 'SELECT 
+    NomeAluno, 
+    RM, 
+   NotaFinalCN, NotaFinalLP, NotaFinalAR, NotaFinalEF, NotaFinalCCE, NotaFinalLI, NotaFinalPF, NotaFinalROB, NotaFinalPR, NotaFinalPSC,
+    ComDeficiencia, 
+    Ano, 
+    Turma, ' 
+	+ @column_list + '
+FROM TabelaGeralEFUM 
+WHERE Turma LIKE ''${Turma}'' 
+AND Ano = ${Ano}
+AND (NotaFinalCN < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalCCE < 7 OR NotaFinalLI < 7 OR NotaFinalPF < 7 OR NotaFinalROB < 7 OR NotaFinalPR < 7 OR NotaFinalPSC < 7);'
 
-    SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
 
-    DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno, RM, NotaFinalCN, NotaFinalLP, NotaFinalAR, NotaFinalEF, NotaFinalCCE, NotaFinalLI, NotaFinalPF, NotaFinalROB, NotaFinalPR, NotaFinalPSC, ComDeficiencia, Ano, Turma, ' + @column_list + 'FROM TabelaGeralEFUM where Turma LIKE ''${Turma}'' and Ano = ${Ano};'
-
-    EXEC sp_executesql @sql;
+      
+EXEC sp_executesql @sql;
   `;
 
   const params = [

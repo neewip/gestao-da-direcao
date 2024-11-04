@@ -74,7 +74,7 @@ async function getUserById(RM) {
   
     Ano = parseInt(Ano); // Parse etapa as an integer
     const query = `
-      DECLARE @word NVARCHAR(50) = '${etapa}';
+        DECLARE @word NVARCHAR(50) = '${etapa}';
       DECLARE @column_list NVARCHAR(MAX) = (
           SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
           FROM INFORMATION_SCHEMA.COLUMNS
@@ -85,9 +85,30 @@ async function getUserById(RM) {
   
       SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
   
-      DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno, RM, NotaFinalCN, NotaFinalLP, NotaFinalAR, NotaFinalEF, NotaFinalHIS, NotaFinalGEO, NotaFinalEIXO, NotaFinalLI, NotaFinalPR, ComDeficiencia, Ano, Turma, ' + @column_list + 'FROM TabelaGeralEFDOIS where Turma LIKE ''${Turma}'' and Ano = ${Ano};'
+      DECLARE @sql NVARCHAR(MAX) = 'SELECT 
+    NomeAluno, 
+    RM, 
+    NotaFinalCN,
+    NotaFinalLP,
+    NotaFinalAR,
+    NotaFinalEF,
+    NotaFinalHIS,
+    NotaFinalGEO,
+    NotaFinalEIXO,
+    NotaFinalLI,
+    NotaFinalPR,
+    ComDeficiencia, 
+    Ano, 
+    Turma, ' 
+	+ @column_list + '
+FROM TabelaGeralEFDOIS 
+WHERE Turma LIKE ''${Turma}'' 
+AND Ano = ${Ano}
+AND (NotaFinalCN < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalHIS < 7 OR NotaFinalGEO < 7 OR NotaFinalEIXO < 7 OR NotaFinalLI < 7 OR NotaFinalPR < 7);'
 
-      EXEC sp_executesql @sql;
+
+      
+EXEC sp_executesql @sql;
     `;
     const params = [
       { name: "etapa", type: TYPES.NVarChar, value: etapa },
