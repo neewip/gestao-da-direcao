@@ -98,7 +98,7 @@ async function deleteUser(RM) {
 }
 
 async function getUserByFilter(Turma, ano) {
-  const query = "select * from AlunosGeral WHERE Turma LIKE @Turma AND ano = @ano";
+  const query = "select * from AlunosGeral WHERE Turma LIKE @Turma AND ano = @ano ORDER BY NomeAluno";
   const params = [
     { name: "Turma", type: TYPES.VarChar, value: Turma },
     { name: "ano", type: TYPES.Int, value: ano },
