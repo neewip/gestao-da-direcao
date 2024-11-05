@@ -104,7 +104,7 @@ async function getUserById(RM) {
 FROM TabelaGeralEFDOIS 
 WHERE Turma LIKE ''${Turma}'' 
 AND Ano = ${Ano}
-AND (NotaFinalCN < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalHIS < 7 OR NotaFinalGEO < 7 OR NotaFinalEIXO < 7 OR NotaFinalLI < 7 OR NotaFinalPR < 7);'
+AND (NotaFinalCN < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalHIS < 7 OR NotaFinalGEO < 7 OR NotaFinalEIXO < 7 OR NotaFinalLI < 7 OR NotaFinalPR < 7) ORDER BY NomeAluno;'
 
 
       

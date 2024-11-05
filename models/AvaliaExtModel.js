@@ -110,7 +110,7 @@ async function deleteUser(rm) {
 
 async function getUserByFilter(etapa, Turma, ano, tipoprova) {
   etapa = parseInt(etapa, 10); // Parse etapa as an integer
-  const query = "select rm, NomeAluno, notaExt from AvaliaExtFilter where etapa = @etapa and Turma LIKE @Turma AND ano = @ano and tipoprova = @tipoprova";
+  const query = "select rm, NomeAluno, notaExt from AvaliaExtFilter where etapa = @etapa and Turma LIKE @Turma AND ano = @ano and tipoprova = @tipoprova ORDER BY NomeAluno";
   const params = [
     { name: "etapa", type: TYPES.Int, value: etapa },
     { name: "Turma", type: TYPES.VarChar, value: Turma },

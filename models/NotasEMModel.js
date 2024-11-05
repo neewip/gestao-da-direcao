@@ -84,7 +84,7 @@ async function getUserByFilter(etapa, Turma, Ano) {
 
     SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
 
-    DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno,' + @column_list + ' FROM NotasEMFilter where Turma LIKE ''${Turma}'' and Ano = ${Ano};'
+    DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno,' + @column_list + ' FROM NotasEMFilter where Turma LIKE ''${Turma}'' and Ano = ${Ano} ORDER BY NomeAluno;'
     EXEC sp_executesql @sql;
   `;
 

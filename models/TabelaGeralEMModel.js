@@ -95,7 +95,7 @@ async function getUserByFilter(etapa, Turma, Ano) {
 FROM TabelaGeralEM 
 WHERE Turma LIKE ''${Turma}'' 
 AND Ano = ${Ano}
-AND (NotaFinalBIO < 7 OR NotaFinalFIS < 7 OR NotaFinalQUI < 7 OR NotaFinalMA < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalLI < 7 OR NotaFinalHI < 7 OR NotaFinalGE < 7 OR NotaFinalSOC < 7 OR NotaFinalFIL < 7);'
+AND (NotaFinalBIO < 7 OR NotaFinalFIS < 7 OR NotaFinalQUI < 7 OR NotaFinalMA < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalLI < 7 OR NotaFinalHI < 7 OR NotaFinalGE < 7 OR NotaFinalSOC < 7 OR NotaFinalFIL < 7) ORDER BY NomeAluno;'
 
 
       
