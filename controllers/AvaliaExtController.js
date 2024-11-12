@@ -19,13 +19,13 @@ async function getUsers(req, res) {
 }
 
 // Função para obter um usuário específico pelo ID
-async function getUser(req, res) {
+async function getUserById(req, res) {
   // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
-  const RM = req.params.RM;
-  const Ano = req.params.Ano;
+  const rm = req.params.rm;
+  const ano = req.params.ano;
   try {
     // Chama o método do modelo para obter o usuário com base no ID fornecido
-    const user = await userModel.getUserById(RM, Ano);
+    const user = await userModel.getUserById(rm, ano);
     
     // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
     if (!user) {
@@ -128,7 +128,7 @@ async function getUserByFilter(req, res) {
 // Exporta as funções do controller para serem usadas nas rotas da aplicação
 module.exports = {
   getUsers,
-  getUser,
+  getUserById,
   createUser,
   updateUser,
   deleteUser,

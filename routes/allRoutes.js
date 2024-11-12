@@ -49,7 +49,7 @@ router.get("/avalia", AvaliaController.getUsers);
 
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
-router.get("/avalia/:RM/:Ano", AvaliaController.getUser);
+router.get("/avalia/:rm/:ano", AvaliaController.getUserById);
 
 // Rota POST para criar um novo usuário
 // Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
