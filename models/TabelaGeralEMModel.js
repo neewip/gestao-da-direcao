@@ -66,17 +66,54 @@ async function getUserById(RM) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
-async function getUserByFilter(Turma, Ano) {
-    const query = "select * from TabelaGeralEM WHERE Turma LIKE @Turma AND Ano = @Ano";
-    const params = [
-      { name: "Turma", type: TYPES.VarChar, value: Turma },
-      { name: "Ano", type: TYPES.Int, value: Ano },
-      
-    ];
-    const users = await executeQuery(query, params);
-    return users;
+async function getUserByFilter(etapa, Turma, Ano) {
+  console.log('Valor de etapa:', etapa);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
 
-  }
+  Ano = parseInt(Ano); // Parse etapa as an integer
+  const query = `
+   DECLARE @word NVARCHAR(50) = '${etapa}';
+      DECLARE @column_list NVARCHAR(MAX) = (
+          SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
+          FROM INFORMATION_SCHEMA.COLUMNS
+          WHERE table_name = 'TabelaGeralEM'
+          AND column_name LIKE @word + '%'
+          FOR XML PATH('')
+      );
+  
+      SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
+  
+      DECLARE @sql NVARCHAR(MAX) = 'SELECT 
+    NomeAluno, 
+    RM, 
+   NotaFinalBIO, NotaFinalFIS, NotaFinalQUI, NotaFinalMA, NotaFinalLP, NotaFinalAR, NotaFinalEF, NotaFinalLI, NotaFinalHI, NotaFinalGE, NotaFinalSOC, NotaFinalFIL,
+    ComDeficiencia, 
+    Ano, 
+    Turma, ' 
+	+ @column_list + '
+FROM TabelaGeralEM 
+WHERE Turma LIKE ''${Turma}'' 
+AND Ano = ${Ano}
+AND (NotaFinalBIO < 7 OR NotaFinalFIS < 7 OR NotaFinalQUI < 7 OR NotaFinalMA < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalLI < 7 OR NotaFinalHI < 7 OR NotaFinalGE < 7 OR NotaFinalSOC < 7 OR NotaFinalFIL < 7) ORDER BY NomeAluno;'
+
+
+      
+EXEC sp_executesql @sql;
+  `;
+
+  const params = [
+    { name: "etapa", type: TYPES.NVarChar, value: etapa },
+    { name: "Turma", type: TYPES.NVarChar, value: Turma },
+    { name: "Ano", type: TYPES.Int, value: Ano }
+];
+
+  console.log('Query:', query);
+
+  const users = await executeQuery(query, params);
+  console.log('Resultado:', users);
+  return users;
+}
 
 // Exporta as funções para serem usadas nos controllers
 module.exports = {

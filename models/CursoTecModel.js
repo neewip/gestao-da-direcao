@@ -68,7 +68,7 @@ async function getUserById(rm) {
 
 async function getUserByFilter(etapa, Turma, ano) {
   etapa = parseInt(etapa, 10); // Parse etapa as an integer
-  const query = "select * from CursoTecFilter where etapa = @etapa and Turma LIKE @Turma AND ano = @ano";
+  const query = "select * from CursoTecFilter where etapa = @etapa and Turma LIKE @Turma AND ano = @ano ORDER BY NomeAluno";
   const params = [
     { name: "etapa", type: TYPES.Int, value: etapa },
     { name: "Turma", type: TYPES.VarChar, value: Turma },

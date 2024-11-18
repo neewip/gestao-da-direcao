@@ -19,12 +19,13 @@ async function getUsers(req, res) {
 }
 
 // Função para obter um usuário específico pelo ID
-async function getUser(req, res) {
+async function getUserById(req, res) {
   // Extrai o ID do usuário da requisição (usado na URL: /users/:id)
   const rm = req.params.rm;
+  const ano = req.params.ano;
   try {
     // Chama o método do modelo para obter o usuário com base no ID fornecido
-    const user = await userModel.getUserById(rm);
+    const user = await userModel.getUserById(rm, ano);
     
     // Se o usuário não for encontrado, retorna um status 404 (não encontrado)
     if (!user) {
@@ -61,7 +62,9 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
   // Extrai o ID do usuário da URL e os novos dados do corpo da requisição
   const rm = req.params.rm;
-  const {etapa, ano, tipoprova, notaExt } = req.body;
+  const ano = req.params.ano;
+  const tipoprova = req.params.tipoprova;
+  const {etapa, notaExt } = req.body;
   try {
     // Chama o método do modelo para atualizar o usuário com base no ID e nos dados fornecidos
     await userModel.updateUser(rm, etapa, ano, tipoprova, notaExt );
@@ -97,10 +100,12 @@ async function getUserByFilter(req, res) {
   const etapa = req.params.etapa;
   const turma = req.params.Turma;
   const ano = req.params.ano;
+  const tipoprova = req.params.tipoprova;
+
 
   try {
     // Chama o método do modelo para obter o usuário com base no ID fornecido
-    const user = await userModel.getUserByFilter(etapa, turma, ano);
+    const user = await userModel.getUserByFilter(etapa, turma, ano, tipoprova);
     
 
     
@@ -123,7 +128,7 @@ async function getUserByFilter(req, res) {
 // Exporta as funções do controller para serem usadas nas rotas da aplicação
 module.exports = {
   getUsers,
-  getUser,
+  getUserById,
   createUser,
   updateUser,
   deleteUser,

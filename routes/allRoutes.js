@@ -49,7 +49,7 @@ router.get("/avalia", AvaliaController.getUsers);
 
 // Rota GET para obter um usuário específico pelo ID
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
-router.get("/avalia/:rm", AvaliaController.getUser);
+router.get("/avalia/:rm/:ano", AvaliaController.getUserById);
 
 // Rota POST para criar um novo usuário
 // Chama o método "createUser" do controller ao acessar "/users" com dados no corpo da requisição
@@ -57,7 +57,7 @@ router.post("/avalia/", AvaliaController.createUser);
 
 // Rota PUT para atualizar um usuário existente pelo ID
 // Chama o método "updateUser" do controller ao acessar "/users/:id" e fornecer novos dados no corpo da requisição
-router.put("/avalia/:rm", AvaliaController.updateUser);
+router.put("/avalia/:rm/:ano/:tipoprova", AvaliaController.updateUser);
 
 // Rota DELETE para deletar um usuário específico pelo ID
 // Chama o método "deleteUser" do controller ao acessar "/users/:id"
@@ -65,7 +65,7 @@ router.delete("avalia/:rm", AvaliaController.deleteUser);
 
 
 
-router.get("/avalia/:etapa/:Turma/:ano", AvaliaController.getUserByFilter);
+router.get("/avalia/:etapa/:Turma/:ano/:tipoprova", AvaliaController.getUserByFilter);
 
 
 //
@@ -87,6 +87,7 @@ router.get("/avaliasesi", AvaliaSESIController .getUsers);
 router.get("/avaliasesi/:rm", AvaliaSESIController .getUser);
 
 router.put("/avaliasesi/:rm", AvaliaSESIController .updateInc);
+router.get("/avaliasesi/:etapa/:Turma/:Ano", AvaliaSESIController.getUserByFilter);
 
 
 
@@ -131,7 +132,7 @@ router.get("/notasEF1", NotasEF1Controller.getUsers);
 router.get("/notasEF1/:RM", NotasEF1Controller.getUser);
 
 
-router.get("/notasEF1/:etapa/:Turma/:Ano", NotasEF1Controller.getUserByFilter);
+router.get("/notasEF1/:Turma/:etapa/:Ano", NotasEF1Controller.getUserByFilter);
 
 //
 
@@ -154,7 +155,7 @@ router.get("/notasEF2", NotasEF2Controller.getUsers);
 router.get("/notasEF2/:RM", NotasEF2Controller.getUser);
 
 
-router.get("/notasEF2/:etapa/:Turma/:Ano", NotasEF2Controller.getUserByFilter);
+router.get("/notasEF2/:Turma/:etapa/:Ano", NotasEF2Controller.getUserByFilter);
 
 
 
@@ -180,7 +181,7 @@ router.get("/notasEM/:rm", NotasEMController.getUser);
 
 
 
-router.get("/notasEM/:etapa/:Turma/:Ano", NotasEMController.getUserByFilter);
+router.get("/notasEM/:Turma/:etapa/:Ano", NotasEMController.getUserByFilter);
 
 //
 
@@ -197,7 +198,7 @@ router.get("/tabelageralef1/:RM", TabelaGeralEFUM.getUser);
 
 
 
-router.get("/tabelageralef1/:Turma/:Ano", TabelaGeralEFUM.getUserByFilter);
+router.get("/tabelageralef1/:etapa/:Turma/:Ano", TabelaGeralEFUM.getUserByFilter);
 
 
 //
@@ -215,8 +216,7 @@ router.get("/tabelageralef2/:RM", TabelaGeralEFDOIS.getUser);
 
 
 
-router.get("/tabelageralef2/:Turma/:Ano", TabelaGeralEFDOIS.getUserByFilter);
-
+router.get("/tabelageralef2/:etapa/:Turma/:Ano", TabelaGeralEFDOIS.getUserByFilter);
 
 //
 
@@ -233,7 +233,7 @@ router.get("/tabelageralem/:RM", TabelaGeralEM.getUser);
 
 
 
-router.get("/tabelageralem/:Turma/:Ano", TabelaGeralEM.getUserByFilter);
+router.get("/tabelageralem/:etapa/:Turma/:Ano", TabelaGeralEM.getUserByFilter);
 
 
 
