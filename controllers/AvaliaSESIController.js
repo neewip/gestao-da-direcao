@@ -40,10 +40,28 @@ async function getUser(req, res) {
   }
 }
 
+async function updateInc(req, res) {
+  // Extrai o ID do usuário da URL e os novos dados do corpo da requisição
+  const rm = req.params.rm;
+  const ComDeficiencia = req.body;
+  try {
+    // Chama o método do modelo para atualizar o usuário com base no ID e nos dados fornecidos
+    await userModel.updateInc(rm, ComDeficiencia );
+    
+    // Retorna uma mensagem de sucesso após a atualização
+    res.send("Usuário atualizado com sucesso");
+  } catch (err) {
+    // Exibe o erro no console e retorna uma resposta com status 500
+    console.error(err.message);
+    res.status(500).send("Erro ao atualizar o usuário");
+  }
+}
+
 
 
 // Exporta as funções do controller para serem usadas nas rotas da aplicação
 module.exports = {
+  updateInc,
   getUsers,
   getUser,
 };

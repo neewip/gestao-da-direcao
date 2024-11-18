@@ -66,10 +66,19 @@ async function getUserById(rm) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
+async function updateInc(rm, ComDeficiencia) {
+  const query = `UPDATE AvaliaSESI SET ComDeficiencia = @ComDeficiencia WHERE rm = @rm;`;  // Query SQL para atualizar o registro
+  const params = [
+    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
+    { name: "ComDeficiencia", type: TYPES.NVarChar, value: ComDeficiencia },  // Define o parâmetro @email  // Define o parâmetro @age
+  ];
+  await executeQuery(query, params);  // Executa a query com os parâmetros
+}
 
 
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
+  updateInc,
   getAllUsers,
   getUserById,
 };
