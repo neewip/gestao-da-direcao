@@ -10,7 +10,7 @@ const connectDatabase = require("../database/connection");
 async function executeQuery(query, params = []) {
   // Estabelece uma conexão com o banco de dados
   const connection = await connectDatabase();
-  
+
   // Retorna uma Promise para lidar com a execução assíncrona da query
   return new Promise((resolve, reject) => {
     // Cria uma nova requisição SQL com a query passada e um callback para erros
@@ -67,12 +67,21 @@ async function getUserById(rm) {
 }
 
 async function updateInc(rm, ComDeficiencia) {
-  const query = `UPDATE AvaliaSESI SET ComDeficiencia = @ComDeficiencia WHERE rm = @rm;`;  // Query SQL para atualizar o registro
+  console.log('Valor de rm:', rm);
+  console.log('Valor de ComDeficiencia:', ComDeficiencia);
+
+  // Acesse o valor de ComDeficiencia corretamente, caso seja um objeto
+  if (typeof ComDeficiencia === 'object' && ComDeficiencia !== null) {
+    ComDeficiencia = ComDeficiencia.ComDeficiencia; // Acesse a propriedade correta
+  }
+
+  const query = `UPDATE AvaliaSESI SET ComDeficiencia = @ComDeficiencia WHERE rm = @rm;`;
   const params = [
-    { name: "rm", type: TYPES.Int, value: rm},  // Define o parâmetro @name
-    { name: "ComDeficiencia", type: TYPES.NVarChar, value: ComDeficiencia },  // Define o parâmetro @email  // Define o parâmetro @age
+    { name: "rm", type: TYPES.Int, value: rm },
+    { name: "ComDeficiencia", type: TYPES.NVarChar, value: ComDeficiencia },
   ];
-  await executeQuery(query, params);  // Executa a query com os parâmetros
+  await executeQuery(query, params);
+  console.log('Query:', query);
 }
 
 async function getUserByFilter(etapa, Turma, Ano) {
