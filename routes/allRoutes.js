@@ -86,6 +86,7 @@ router.get("/avaliasesi", AvaliaSESIController .getUsers);
 // Chama o método "getUser" do controller ao acessar "/users/:id", onde ":id" é o ID do usuário
 router.get("/avaliasesi/:rm", AvaliaSESIController .getUser);
 
+router.put("/avaliasesi/:rm", AvaliaSESIController .updateInc);
 router.get("/avaliasesi/:etapa/:Turma/:Ano", AvaliaSESIController.getUserByFilter);
 
 
