@@ -71,6 +71,60 @@ async function getUserByFilter(etapa, Turma, Ano) {
   console.log('Valor de Turma:', Turma);
   console.log('Valor de Ano:', Ano);
 
+
+  Ano = parseInt(Ano); // Parse etapa as an integer
+  const query = `
+     
+   DECLARE @word NVARCHAR(50) = '${etapa}';
+      DECLARE @column_list NVARCHAR(MAX) = (
+          SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
+          FROM INFORMATION_SCHEMA.COLUMNS
+          WHERE table_name = 'TabelaGeralEFUM'
+          AND column_name LIKE @word + '%'
+          FOR XML PATH('')
+      );
+  
+      SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
+  
+      DECLARE @sql NVARCHAR(MAX) = 'SELECT 
+    NomeAluno, 
+    RM, 
+   NotaFinalCN, NotaFinalLP, NotaFinalAR, NotaFinalEF, NotaFinalCCE, NotaFinalLI, NotaFinalPF, NotaFinalROB, NotaFinalPR, NotaFinalPSC,
+    ComDeficiencia, 
+    Ano, 
+    Turma, ' 
+	+ @column_list + '
+FROM TabelaGeralEFUM 
+WHERE Turma LIKE ''${Turma}'' 
+AND Ano = ${Ano}'
+
+
+      
+EXEC sp_executesql @sql;
+  `;
+
+  const params = [
+    { name: "etapa", type: TYPES.NVarChar, value: etapa },
+    { name: "Turma", type: TYPES.NVarChar, value: Turma },
+    { name: "Ano", type: TYPES.Int, value: Ano },
+
+];
+
+  console.log('Query:', query);
+
+  const users = await executeQuery(query, params);
+  return users;
+}
+
+//
+
+async function getUserByFilterNota(etapa, Turma, Ano, nota) {
+  console.log('Valor de etapa:', etapa);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
+  console.log('Valor de Nota:', nota);
+
+
   Ano = parseInt(Ano); // Parse etapa as an integer
   const query = `
      
@@ -96,7 +150,7 @@ async function getUserByFilter(etapa, Turma, Ano) {
 FROM TabelaGeralEFUM 
 WHERE Turma LIKE ''${Turma}'' 
 AND Ano = ${Ano}
-AND (NotaFinalCN < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalCCE < 7 OR NotaFinalLI < 7 OR NotaFinalPF < 7 OR NotaFinalROB < 7 OR NotaFinalPR < 7 OR NotaFinalPSC < 7) ORDER BY NomeAluno;'
+AND (NotaFinalCN < ${nota} OR NotaFinalLP <  ${nota} OR NotaFinalAR <  ${nota} OR NotaFinalEF <  ${nota} OR NotaFinalCCE < ${nota} OR NotaFinalLI < ${nota} OR NotaFinalPF < ${nota} OR NotaFinalROB < ${nota} OR NotaFinalPR < ${nota} OR NotaFinalPSC < ${nota}) ORDER BY NomeAluno;'
 
 
       
@@ -106,13 +160,14 @@ EXEC sp_executesql @sql;
   const params = [
     { name: "etapa", type: TYPES.NVarChar, value: etapa },
     { name: "Turma", type: TYPES.NVarChar, value: Turma },
-    { name: "Ano", type: TYPES.Int, value: Ano }
+    { name: "Ano", type: TYPES.Int, value: Ano },
+    { name: "nota", type: TYPES.Int, value: nota }
+
 ];
 
   console.log('Query:', query);
 
   const users = await executeQuery(query, params);
-  console.log('Resultado:', users);
   return users;
 }
 
@@ -121,4 +176,6 @@ module.exports = {
   getAllUsers,
   getUserById,
   getUserByFilter,
+  getUserByFilterNota,
+
 };

@@ -199,6 +199,8 @@ router.get("/tabelageralef1/:RM", TabelaGeralEFUM.getUser);
 
 
 router.get("/tabelageralef1/:etapa/:Turma/:Ano", TabelaGeralEFUM.getUserByFilter);
+router.get("/tabelageralef1/:etapa/:Turma/:Ano/:nota", TabelaGeralEFUM.getUserByFilterNota);
+
 
 
 //
@@ -217,6 +219,8 @@ router.get("/tabelageralef2/:RM", TabelaGeralEFDOIS.getUser);
 
 
 router.get("/tabelageralef2/:etapa/:Turma/:Ano", TabelaGeralEFDOIS.getUserByFilter);
+router.get("/tabelageralef2/:etapa/:Turma/:Ano/:nota", TabelaGeralEFDOIS.getUserByFilterNota);
+
 
 //
 
@@ -234,6 +238,8 @@ router.get("/tabelageralem/:RM", TabelaGeralEM.getUser);
 
 
 router.get("/tabelageralem/:etapa/:Turma/:Ano", TabelaGeralEM.getUserByFilter);
+router.get("/tabelageralem/:etapa/:Turma/:Ano/:nota", TabelaGeralEM.getUserByFilterNota);
+
 
 
 

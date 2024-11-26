@@ -66,10 +66,12 @@ async function getUserById(RM) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
-  async function getUserByFilter(etapa, Turma, Ano) {
+  async function getUserByFilterNota(etapa, Turma, Ano, nota) {
     console.log('Valor de etapam:', etapa);
     console.log('Valor de Turmam:', Turma);
     console.log('Valor de Anom:', Ano);
+    console.log('Valor de nota:', nota);
+
     
   
     Ano = parseInt(Ano); // Parse etapa as an integer
@@ -104,7 +106,7 @@ async function getUserById(RM) {
 FROM TabelaGeralEFDOIS 
 WHERE Turma LIKE ''${Turma}'' 
 AND Ano = ${Ano}
-AND (NotaFinalCN < 7 OR NotaFinalLP < 7 OR NotaFinalAR < 7 OR NotaFinalEF < 7 OR NotaFinalHIS < 7 OR NotaFinalGEO < 7 OR NotaFinalEIXO < 7 OR NotaFinalLI < 7 OR NotaFinalPR < 7) ORDER BY NomeAluno;'
+AND (NotaFinalCN <  ${nota} OR NotaFinalLP <  ${nota} OR NotaFinalAR <  ${nota} OR NotaFinalEF < ${nota} OR NotaFinalHIS < ${nota} OR NotaFinalGEO < ${nota} OR NotaFinalEIXO < ${nota} OR NotaFinalLI < ${nota} OR NotaFinalPR < ${nota}) ORDER BY NomeAluno;'
 
 
       
@@ -113,13 +115,72 @@ EXEC sp_executesql @sql;
     const params = [
       { name: "etapa", type: TYPES.NVarChar, value: etapa },
       { name: "Turma", type: TYPES.NVarChar, value: Turma },
-      { name: "Ano", type: TYPES.Int, value: Ano }
+      { name: "Ano", type: TYPES.Int, value: Ano },
+      { name: "Nota", type: TYPES.Int, value: nota }
+
   ];
   
     console.log('Query:', query);
   
     const users = await executeQuery(query, params);
-    console.log('Resultado:', users);
+    return users;
+  }
+
+
+  //
+
+  async function getUserByFilter(etapa, Turma, Ano) {
+    console.log('Valor de etapam:', etapa);
+    console.log('Valor de Turmam:', Turma);
+    console.log('Valor de Anom:', Ano);
+
+    
+  
+    Ano = parseInt(Ano); // Parse etapa as an integer
+    const query = `
+        DECLARE @word NVARCHAR(50) = '${etapa}';
+      DECLARE @column_list NVARCHAR(MAX) = (
+          SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
+          FROM INFORMATION_SCHEMA.COLUMNS
+          WHERE table_name = 'TabelaGeralEFDOIS'
+          AND column_name LIKE @word + '%'
+          FOR XML PATH('')
+      );
+  
+      SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
+  
+      DECLARE @sql NVARCHAR(MAX) = 'SELECT 
+    NomeAluno, 
+    RM, 
+    NotaFinalCN,
+    NotaFinalLP,
+    NotaFinalAR,
+    NotaFinalEF,
+    NotaFinalHIS,
+    NotaFinalGEO,
+    NotaFinalEIXO,
+    NotaFinalLI,
+    NotaFinalPR,
+    ComDeficiencia, 
+    Ano, 
+    Turma, ' 
+	+ @column_list + '
+FROM TabelaGeralEFDOIS 
+WHERE Turma LIKE ''${Turma}'' 
+AND Ano = ${Ano}'
+
+EXEC sp_executesql @sql;
+    `;
+    const params = [
+      { name: "etapa", type: TYPES.NVarChar, value: etapa },
+      { name: "Turma", type: TYPES.NVarChar, value: Turma },
+      { name: "Ano", type: TYPES.Int, value: Ano },
+
+  ];
+  
+    console.log('Query:', query);
+  
+    const users = await executeQuery(query, params);
     return users;
   }
 
@@ -128,4 +189,5 @@ module.exports = {
   getAllUsers,
   getUserById,
   getUserByFilter,
+  getUserByFilterNota,
 };
