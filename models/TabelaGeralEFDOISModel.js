@@ -75,23 +75,23 @@ async function getUserByFilterNota(etapa, Turma, Ano, nota) {
 
       RM, 
 
-      NotaFinalCN,
+      "NotaFinalCN",
 
-      NotaFinalLP,
+      "NotaFinalLP",
 
-      NotaFinalAR,
+      "NotaFinalAR",
 
-      NotaFinalEF,
+      "NotaFinalEF",
 
-      NotaFinalHIS,
+      "NotaFinalHIS",
 
-      NotaFinalGEO,
+      "NotaFinalGEO",
 
-      NotaFinalEIXO,
+      "NotaFinalEIXO",
 
-      NotaFinalLI,
+      "NotaFinalLI",
 
-      NotaFinalPR,
+      "NotaFinalPR",
 
       ComDeficiencia, 
 
@@ -105,7 +105,7 @@ async function getUserByFilterNota(etapa, Turma, Ano, nota) {
 
       AND Ano = $2
 
-      AND (NotaFinalCN < $3 OR NotaFinalLP < $3 OR NotaFinalAR < $3 OR NotaFinalEF < $3 OR NotaFinalHIS < $3 OR NotaFinalGEO < $3 OR NotaFinalEIXO < $3 OR NotaFinalLI < $3 OR NotaFinalPR < $3)
+      AND ("NotaFinalCN" < $3 OR "NotaFinalLP" < $3 OR "NotaFinalAR" < $3 OR "NotaFinalEF" < $3 OR "NotaFinalHIS" < $3 OR "NotaFinalGEO" < $3 OR "NotaFinalEIXO" < $3 OR "NotaFinalLI" < $3 OR "NotaFinalPR" < $3)
 
     ORDER BY NomeAluno;
 
