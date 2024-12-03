@@ -57,16 +57,16 @@ async function getUserByFilter(etapa, Turma, Ano) {
     SELECT 
       NomeAluno, 
       RM, 
-      NotaFinalCN, 
-      NotaFinalLP, 
-      NotaFinalAR, 
-      NotaFinalEF, 
-      NotaFinalCCE, 
-      NotaFinalLI, 
-      NotaFinalPF, 
-      NotaFinalROB, 
-      NotaFinalPR, 
-      NotaFinalPSC,
+      "NotaFinalCN", 
+      "NotaFinalLP", 
+      "NotaFinalAR", 
+      "NotaFinalEF", 
+      "NotaFinalCCE", 
+      "NotaFinalLI", 
+      "NotaFinalPF", 
+      "NotaFinalROB", 
+      "NotaFinalPR", 
+      "NotaFinalPSC",
       ComDeficiencia, 
       Ano, 
       Turma, 
@@ -108,16 +108,16 @@ async function getUserByFilterNota(etapa, Turma, Ano, nota) {
   const sql = `
     SELECT 
       NomeAluno, RM, 
-      NotaFinalCN, 
-      NotaFinalLP, 
-      NotaFinalAR, 
-      NotaFinalEF, 
-      NotaFinalCCE, 
-      NotaFinalLI, 
-      NotaFinalPF, 
-      NotaFinalROB, 
-      NotaFinalPR, 
-      NotaFinalPSC,
+      "NotaFinalCN", 
+      "NotaFinalLP", 
+      "NotaFinalAR", 
+      "NotaFinalEF", 
+      "NotaFinalCCE", 
+      "NotaFinalLI", 
+      "NotaFinalPF", 
+      "NotaFinalROB", 
+      "NotaFinalPR", 
+      "NotaFinalPSC",
       ComDeficiencia, 
       Ano, 
       Turma, 
@@ -125,7 +125,7 @@ async function getUserByFilterNota(etapa, Turma, Ano, nota) {
     FROM tabelageralefum 
     WHERE Turma LIKE $1 
     AND Ano = $2 
-    AND (NotaFinalCN < $3 OR NotaFinalLP < $3 OR NotaFinalAR < $3 OR NotaFinalEF < $3 OR NotaFinalCCE < $3 OR NotaFinalLI < $3 OR NotaFinalPF < $3 OR NotaFinalROB < $3 OR NotaFinalPR < $3 OR NotaFinalPSC < $3) 
+    AND ("NotaFinalCN" < $3 OR "NotaFinalLP" < $3 OR "NotaFinalAR" < $3 OR "NotaFinalEF" < $3 OR "NotaFinalCCE" < $3 OR "NotaFinalLI" < $3 OR "NotaFinalPF" < $3 OR "NotaFinalROB" < $3 OR "NotaFinalPR" < $3 OR "NotaFinalPSC" < $3) 
     ORDER BY NomeAluno;
   `;
 
