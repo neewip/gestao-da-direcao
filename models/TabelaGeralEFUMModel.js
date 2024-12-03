@@ -33,16 +33,19 @@ async function getUserById(RM) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
-async function getUserByFilter(etapa, turma, ano) {
+// Função para filtrar registros com base em critérios
+async function getUserByFilter(etapa, Turma, Ano) {
   console.log('Valor de etapa:', etapa);
-  console.log('Valor de Turma:', turma);
-  console.log('Valor de Ano:', ano);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
 
-  ano = parseInt(ano); // Converte ano para inteiro
+  Ano = parseInt(Ano); // Converte Ano para inteiro
+
+  // Obtendo a lista de colunas que começam com o valor de 'etapa'
   const columnListQuery = `
     SELECT string_agg(quote_ident(column_name), ', ')
     FROM information_schema.columns
-    WHERE table_name = 'TabelaGeralEFUM'  
+    WHERE table_name = 'tabelageralefum'  
     AND column_name LIKE $1;
   `;
 
@@ -54,47 +57,47 @@ async function getUserByFilter(etapa, turma, ano) {
     SELECT 
       NomeAluno, 
       RM, 
-      "NotaFinalBIO", 
-      "NotaFinalFIS", 
-      "NotaFinalQUI", 
-      "NotaFinalMA", 
-      "NotaFinalLP", 
-      "NotaFinalAR", 
-      "NotaFinalEF", 
-      "NotaFinalLI", 
-      "NotaFinalHI", 
-      "NotaFinalGE", 
-      "NotaFinalSOC", 
-      "NotaFinalFIL",
+      NotaFinalCN, 
+      NotaFinalLP, 
+      NotaFinalAR, 
+      NotaFinalEF, 
+      NotaFinalCCE, 
+      NotaFinalLI, 
+      NotaFinalPF, 
+      NotaFinalROB, 
+      NotaFinalPR, 
+      NotaFinalPSC,
       ComDeficiencia, 
       Ano, 
       Turma, 
       ${column_list}
-    FROM TabelaGeralEM 
+    FROM tabelageralefum 
     WHERE Turma LIKE $1 
     AND Ano = $2;
   `;
 
-  const params = [turma, ano];
+  const params = [Turma, Ano];
 
   console.log('Query:', sql);
 
-  const records = await executeQuery(sql, params);
-  return records;
+  const users = await executeQuery(sql, params);
+  return users;
 }
 
 // Função para filtrar registros com base em notas
-async function getUserByFilterNota(etapa, turma, ano, nota) {
+async function getUserByFilterNota(etapa, Turma, Ano, nota) {
   console.log('Valor de etapa:', etapa);
-  console.log('Valor de Turma:', turma);
-  console.log('Valor de Ano:', ano);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
   console.log('Valor de Nota:', nota);
 
-  ano = parseInt(ano); // Converte ano para inteiro
+  Ano = parseInt(Ano); // Converte Ano para inteiro
+
+  // Obtendo a lista de colunas que começam com o valor de 'etapa'
   const columnListQuery = `
     SELECT string_agg(quote_ident(column_name), ', ')
     FROM information_schema.columns
-    WHERE table_name = 'TabelaGeralEM'  
+    WHERE table_name = 'tabelageralefum'  
     AND column_name LIKE $1;
   `;
 
@@ -104,37 +107,34 @@ async function getUserByFilterNota(etapa, turma, ano, nota) {
   // Montando a consulta SQL
   const sql = `
     SELECT 
-      NomeAluno, 
-      RM, 
-      "NotaFinalBIO", 
-      "NotaFinalFIS", 
-      "NotaFinalQUI", 
-      "NotaFinalMA", 
-      "NotaFinalLP", 
-      "NotaFinalAR", 
-      "NotaFinalEF", 
-      "NotaFinalLI", 
-      "NotaFinalHI", 
-      "NotaFinalGE", 
-      "NotaFinalSOC", 
-      "NotaFinalFIL",
+      NomeAluno, RM, 
+      NotaFinalCN, 
+      NotaFinalLP, 
+      NotaFinalAR, 
+      NotaFinalEF, 
+      NotaFinalCCE, 
+      NotaFinalLI, 
+      NotaFinalPF, 
+      NotaFinalROB, 
+      NotaFinalPR, 
+      NotaFinalPSC,
       ComDeficiencia, 
       Ano, 
       Turma, 
       ${column_list}
-    FROM TabelaGeralEM 
+    FROM tabelageralefum 
     WHERE Turma LIKE $1 
     AND Ano = $2 
-    AND (NotaFinalBIO < $3 OR NotaFinalFIS < $3 OR NotaFinalQUI < $3 OR NotaFinalMA < $3 OR NotaFinalLP < $3 OR NotaFinalAR < $3 OR NotaFinalEF < $3 OR NotaFinalLI < $3 OR NotaFinalHI < $3 OR NotaFinalGE < $3 OR NotaFinalSOC < $3 OR NotaFinalFIL < $3) 
+    AND (NotaFinalCN < $3 OR NotaFinalLP < $3 OR NotaFinalAR < $3 OR NotaFinalEF < $3 OR NotaFinalCCE < $3 OR NotaFinalLI < $3 OR NotaFinalPF < $3 OR NotaFinalROB < $3 OR NotaFinalPR < $3 OR NotaFinalPSC < $3) 
     ORDER BY NomeAluno;
   `;
 
-  const params = [turma, ano, nota];
+  const params = [Turma, Ano, nota];
 
   console.log('Query:', sql);
 
-  const records = await executeQuery(sql, params);
-  return records;
+  const users = await executeQuery(sql, params);
+  return users;
 }
 
 // Exporta as funções para serem usadas nos controllers
