@@ -173,4 +173,4 @@ module.exports = {
   getRecordById,
   updateField,
   getRecordsByFilter,
-};const executeQuery = require("../config/config"); // Importa a função executeQuery do arquivo de configuração
+};
