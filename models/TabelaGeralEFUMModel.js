@@ -33,117 +33,108 @@ async function getUserById(RM) {
   return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
-async function getUserByFilter(etapa, Turma, Ano) {
+async function getUserByFilter(etapa, turma, ano) {
   console.log('Valor de etapa:', etapa);
-  console.log('Valor de Turma:', Turma);
-  console.log('Valor de Ano:', Ano);
+  console.log('Valor de Turma:', turma);
+  console.log('Valor de Ano:', ano);
 
-  Ano = parseInt(Ano); // Parse etapa as an integer
-  const query = `
-    DO $$
-    DECLARE
-        word TEXT := $1;  
-        column_list TEXT;
-        sql TEXT;
-    BEGIN
-        -- Obtendo a lista de colunas que começam com o valor de 'word'
-        SELECT string_agg(quote_ident(column_name), ', ')
-        INTO column_list
-        FROM information_schema.columns
-        WHERE table_name = 'tabelageralefum'  
-        AND column_name LIKE word || '%';
-
-        -- Montando a consulta SQL
-        sql := 'SELECT 
-        NomeAluno, 
-        RM, 
-        NotaFinalCN, 
-        NotaFinalLP, 
-        NotaFinalAR, 
-        NotaFinalEF, 
-        NotaFinalCCE, 
-        NotaFinalLI, 
-        NotaFinalPF, 
-        NotaFinalROB, 
-        NotaFinalPR, 
-        NotaFinalPSC,
-        ComDeficiencia, 
-        Ano, 
-        Turma, ' 
-        || column_list || '
-        FROM tabelageralefum 
-        WHERE Turma LIKE $2 
-        AND Ano = $3';
-
-        -- Executando a consulta
-        EXECUTE sql;
-    END $$;
+  ano = parseInt(ano); // Converte ano para inteiro
+  const columnListQuery = `
+    SELECT string_agg(quote_ident(column_name), ', ')
+    FROM information_schema.columns
+    WHERE table_name = 'TabelaGeralEFUM'  
+    AND column_name LIKE $1;
   `;
 
-  const params = [etapa, Turma, Ano];
+  const columnListResult = await executeQuery(columnListQuery, [etapa + '%']);
+  const column_list = columnListResult[0].string_agg; // Obtém a lista de colunas
 
-  console.log('Query:', query);
+  // Montando a consulta SQL
+  const sql = `
+    SELECT 
+      NomeAluno, 
+      RM, 
+      "NotaFinalBIO", 
+      "NotaFinalFIS", 
+      "NotaFinalQUI", 
+      "NotaFinalMA", 
+      "NotaFinalLP", 
+      "NotaFinalAR", 
+      "NotaFinalEF", 
+      "NotaFinalLI", 
+      "NotaFinalHI", 
+      "NotaFinalGE", 
+      "NotaFinalSOC", 
+      "NotaFinalFIL",
+      ComDeficiencia, 
+      Ano, 
+      Turma, 
+      ${column_list}
+    FROM TabelaGeralEM 
+    WHERE Turma LIKE $1 
+    AND Ano = $2;
+  `;
 
-  const users = await executeQuery(query, params);
-  return users;
+  const params = [turma, ano];
+
+  console.log('Query:', sql);
+
+  const records = await executeQuery(sql, params);
+  return records;
 }
 
-async function getUserByFilterNota(etapa, Turma, Ano, nota) {
+// Função para filtrar registros com base em notas
+async function getUserByFilterNota(etapa, turma, ano, nota) {
   console.log('Valor de etapa:', etapa);
-  console.log('Valor de Turma:', Turma);
-  console.log('Valor de Ano:', Ano);
+  console.log('Valor de Turma:', turma);
+  console.log('Valor de Ano:', ano);
   console.log('Valor de Nota:', nota);
 
-  Ano = parseInt(Ano); // Parse etapa as an integer
-  const query = `
-    DO $$
-    DECLARE
-        word TEXT := $1;  
-        column_list TEXT;
-        sql TEXT;
-    BEGIN
-        -- Obtendo a lista de colunas que começam com o valor de 'word'
-        SELECT string_agg(quote_ident(column_name), ', ')
-        INTO column_list
-        FROM information_schema.columns
-        WHERE table_name = 'tabelageralefum'  
-        AND column_name LIKE word || '%';
-
-        -- Montando a consulta SQL
-        sql := 'SELECT 
-        NomeAluno, 
-        RM, 
-        NotaFinalCN, 
-        NotaFinalLP, 
-        NotaFinalAR, 
-        NotaFinalEF, 
-        NotaFinalCCE, 
-        NotaFinalLI, 
-        NotaFinalPF, 
-        NotaFinalROB, 
-        NotaFinalPR, 
-        NotaFinalPSC,
-        ComDeficiencia, 
-        Ano, 
-        Turma, ' 
-        || column_list || '
-        FROM tabelageralefum 
-        WHERE Turma LIKE $2 
-        AND Ano = $3 
-        AND (NotaFinalCN < $4 OR NotaFinalLP < $4 OR NotaFinalAR < $4 OR NotaFinalEF < $4 OR NotaFinalCCE < $4 OR NotaFinalLI < $4 OR NotaFinalPF < $4 OR NotaFinalROB < $4 OR NotaFinalPR < $4 OR NotaFinalPSC < $4) 
-        ORDER BY NomeAluno;';
-
-        -- Executando a consulta
-        EXECUTE sql;
-    END $$;
+  ano = parseInt(ano); // Converte ano para inteiro
+  const columnListQuery = `
+    SELECT string_agg(quote_ident(column_name), ', ')
+    FROM information_schema.columns
+    WHERE table_name = 'TabelaGeralEM'  
+    AND column_name LIKE $1;
   `;
 
-  const params = [etapa, Turma, Ano, nota];
+  const columnListResult = await executeQuery(columnListQuery, [etapa + '%']);
+  const column_list = columnListResult[0].string_agg; // Obtém a lista de colunas
 
-  console.log('Query:', query);
+  // Montando a consulta SQL
+  const sql = `
+    SELECT 
+      NomeAluno, 
+      RM, 
+      "NotaFinalBIO", 
+      "NotaFinalFIS", 
+      "NotaFinalQUI", 
+      "NotaFinalMA", 
+      "NotaFinalLP", 
+      "NotaFinalAR", 
+      "NotaFinalEF", 
+      "NotaFinalLI", 
+      "NotaFinalHI", 
+      "NotaFinalGE", 
+      "NotaFinalSOC", 
+      "NotaFinalFIL",
+      ComDeficiencia, 
+      Ano, 
+      Turma, 
+      ${column_list}
+    FROM TabelaGeralEM 
+    WHERE Turma LIKE $1 
+    AND Ano = $2 
+    AND (NotaFinalBIO < $3 OR NotaFinalFIS < $3 OR NotaFinalQUI < $3 OR NotaFinalMA < $3 OR NotaFinalLP < $3 OR NotaFinalAR < $3 OR NotaFinalEF < $3 OR NotaFinalLI < $3 OR NotaFinalHI < $3 OR NotaFinalGE < $3 OR NotaFinalSOC < $3 OR NotaFinalFIL < $3) 
+    ORDER BY NomeAluno;
+  `;
 
-  const users = await executeQuery(query, params);
-  return users;
+  const params = [turma, ano, nota];
+
+  console.log('Query:', sql);
+
+  const records = await executeQuery(sql, params);
+  return records;
 }
 
 // Exporta as funções para serem usadas nos controllers
