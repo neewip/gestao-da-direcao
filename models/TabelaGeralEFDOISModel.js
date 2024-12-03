@@ -3,7 +3,7 @@ const pool = require("../database/connection");
 
 // Função genérica para executar uma query SQL
 async function executeQuery(query, params = []) {
-<<<<<<< HEAD
+
   const client = await pool.connect(); // Estabelece uma conexão com o banco de dados
   try {
     const res = await client.query(query, params); // Executa a query com os parâmetros
@@ -12,7 +12,7 @@ async function executeQuery(query, params = []) {
     throw err; // Lança erro se ocorrer
   } finally {
     client.release(); // Libera o cliente de volta ao pool
-=======
+
   // Estabelece uma conexão com o banco de dados
   const connection = await connectDatabase();
   
@@ -132,7 +132,6 @@ END $$;
   
     const users = await executeQuery(query, params);
     return users;
->>>>>>> a26b9e0349fdc618e33a5a4a222042256a745aa6
   }
 }
 
