@@ -76,18 +76,21 @@ async function getUserById(RM) {
   
     Ano = parseInt(Ano); // Parse etapa as an integer
     const query = `
-        DECLARE @word NVARCHAR(50) = '${etapa}';
-      DECLARE @column_list NVARCHAR(MAX) = (
-          SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
-          FROM INFORMATION_SCHEMA.COLUMNS
-          WHERE table_name = 'TabelaGeralEFDOIS'
-          AND column_name LIKE @word + '%'
-          FOR XML PATH('')
-      );
-  
-      SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
-  
-      DECLARE @sql NVARCHAR(MAX) = 'SELECT 
+        DO $$
+DECLARE
+    word TEXT := '${etapa}';  -- Substitua pelo valor desejado
+    column_list TEXT;
+    sql TEXT;
+BEGIN
+    -- Obtendo a lista de colunas que começam com o valor de 'word'
+    SELECT string_agg(quote_ident(column_name), ', ')
+    INTO column_list
+    FROM information_schema.columns
+    WHERE table_name = 'tabelageralefdois'  -- Lembre-se de que os nomes de tabelas são sensíveis a maiúsculas e minúsculas se estiverem entre aspas
+    AND column_name LIKE word || '%';
+
+    -- Montando a consulta SQL
+    sql := 'SELECT 
     NomeAluno, 
     RM, 
     NotaFinalCN,
@@ -102,15 +105,15 @@ async function getUserById(RM) {
     ComDeficiencia, 
     Ano, 
     Turma, ' 
-	+ @column_list + '
-FROM TabelaGeralEFDOIS 
-WHERE Turma LIKE ''${Turma}'' 
-AND Ano = ${Ano}
-AND (NotaFinalCN <  ${nota} OR NotaFinalLP <  ${nota} OR NotaFinalAR <  ${nota} OR NotaFinalEF < ${nota} OR NotaFinalHIS < ${nota} OR NotaFinalGEO < ${nota} OR NotaFinalEIXO < ${nota} OR NotaFinalLI < ${nota} OR NotaFinalPR < ${nota}) ORDER BY NomeAluno;'
+	|| column_list || '
+FROM tabelageralefdois 
+WHERE Turma LIKE ''' || '${Turma}' || ''' 
+AND Ano = ' || ${Ano} || '
+AND (NotaFinalCN <  ' || ${nota} || ' OR NotaFinalLP <  ' || ${nota} || ' OR NotaFinalAR <  ' || ${nota} || ' OR NotaFinalEF < ' || ${nota} || ' OR NotaFinalHIS < ' || ${nota} || ' OR NotaFinalGEO < ' || ${nota} || ' OR NotaFinalEIXO < ' || ${nota} || ' OR NotaFinalLI < ' || ${nota} || ' OR NotaFinalPR < ' || ${nota} || ') ORDER BY NomeAluno;';
 
-
-      
-EXEC sp_executesql @sql;
+    -- Executando a consulta
+    EXECUTE sql;
+END $$;
     `;
     const params = [
       { name: "etapa", type: TYPES.NVarChar, value: etapa },
