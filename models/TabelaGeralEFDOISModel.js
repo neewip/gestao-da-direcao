@@ -1,9 +1,8 @@
 // Importa a conexão existente
-const pool = require("../database/connection"); 
+const pool = require("../database/connection"); // Importa a conexão existente
 
 // Função genérica para executar uma query SQL
 async function executeQuery(query, params = []) {
-
   const client = await pool.connect(); // Estabelece uma conexão com o banco de dados
   try {
     const res = await client.query(query, params); // Executa a query com os parâmetros
@@ -12,127 +11,56 @@ async function executeQuery(query, params = []) {
     throw err; // Lança erro se ocorrer
   } finally {
     client.release(); // Libera o cliente de volta ao pool
-
-  // Estabelece uma conexão com o banco de dados
-  const connection = await connectDatabase();
-  
-  // Retorna uma Promise para lidar com a execução assíncrona da query
-  return new Promise((resolve, reject) => {
-    // Cria uma nova requisição SQL com a query passada e um callback para erros
-    const request = new Request(query, (err) => {
-      if (err) {
-        // Se ocorrer um erro, a Promise é rejeitada e a conexão é fechada
-        reject(err);
-        connection.close();
-      }
-    });
-
-    // Adiciona parâmetros à requisição SQL (nome, tipo e valor)
-    params.forEach(({ name, type, value }) => {
-      request.addParameter(name, type, value);
-    });
-
-    // Array para armazenar os resultados retornados pela query
-    let results = [];
-
-    // Evento "row" é disparado para cada linha retornada pela query
-    request.on("row", (columns) => {
-      // Cria um objeto para cada linha e armazena suas colunas e valores
-      let row = {};
-      columns.forEach((column) => {
-        row[column.metadata.colName] = column.value;
-      });
-      results.push(row);
-    });
-
-    // Evento "requestCompleted" é disparado quando a query é completamente executada
-    request.on("requestCompleted", () => {
-      // Fecha a conexão com o banco de dados e resolve a Promise com os resultados
-      connection.close();
-      resolve(results);
-    });
-
-    // Executa a requisição SQL
-    connection.execSql(request);
-  });
+  }
 }
 
 // Função para obter todos os usuários do banco de dados
 async function getAllUsers() {
-  const query = "SELECT * FROM TabelaGeralEFDOIS;";  // Define a query SQL para obter todos os registros da tabela "Users"
-  return await executeQuery(query);  // Executa a query usando a função executeQuery
+  const query = "SELECT * FROM TabelaGeralEFDOIS;"; // Define a query SQL para obter todos os registros da tabela
+  return await executeQuery(query); // Executa a query usando a função executeQuery
 }
 
 // Função para obter um usuário pelo ID
 async function getUserById(RM) {
-  const query = "SELECT * FROM TabelaGeralEFDOIS WHERE RM = @RM";  // Query SQL com um parâmetro para filtrar pelo ID
-  const params = [{ name: "RM", type: TYPES.Int, value: RM }];  // Define o parâmetro @id para ser passado na query
-  const users = await executeQuery(query, params);  // Executa a query com os parâmetros
-  return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
+  const query = "SELECT * FROM TabelaGeralEFDOIS WHERE RM = $1"; // Query SQL com um parâmetro para filtrar pelo ID
+  const users = await executeQuery(query, [RM]); // Executa a query com os parâmetros
+  return users.length > 0 ? users[0] : null; // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
-  async function getUserByFilterNota(etapa, Turma, Ano, nota) {
-    console.log('Valor de etapam:', etapa);
-    console.log('Valor de Turmam:', Turma);
-    console.log('Valor de Anom:', Ano);
-    console.log('Valor de nota:', nota);
+// Função para obter um usuário por filtro de nota
+async function getUserByFilterNota(etapa, Turma, Ano, nota) {
+  console.log('Valor de etapa:', etapa);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
+  console.log('Valor de nota:', nota);
 
-    
+  Ano = parseInt(Ano); // Parse etapa as an integer
+  const query = `
+    SELECT 
+      NomeAluno, 
+      RM, 
+      NotaFinalCN,
+      NotaFinalLP,
+      NotaFinalAR,
+      NotaFinalEF,
+      NotaFinalHIS,
+      NotaFinalGEO,
+      NotaFinalEIXO,
+      NotaFinalLI,
+      NotaFinalPR,
+      ComDeficiencia, 
+      Ano, 
+      Turma
+    FROM TabelaGeralEFDOIS 
+    WHERE Turma LIKE $1 
+      AND Ano = $2
+      AND (NotaFinalCN < $3 OR NotaFinalLP < $3 OR NotaFinalAR < $3 OR NotaFinalEF < $3 OR NotaFinalHIS < $3 OR NotaFinalGEO < $3 OR NotaFinalEIXO < $3 OR NotaFinalLI < $3 OR NotaFinalPR < $3)
+    ORDER BY NomeAluno;
+  `;
   
-    Ano = parseInt(Ano); // Parse etapa as an integer
-    const query = `
-        DO $$
-DECLARE
-    word TEXT := '${etapa}';  -- Substitua pelo valor desejado
-    column_list TEXT;
-    sql TEXT;
-BEGIN
-    -- Obtendo a lista de colunas que começam com o valor de 'word'
-    SELECT string_agg(quote_ident(column_name), ', ')
-    INTO column_list
-    FROM information_schema.columns
-    WHERE table_name = 'tabelageralefdois'  -- Lembre-se de que os nomes de tabelas são sensíveis a maiúsculas e minúsculas se estiverem entre aspas
-    AND column_name LIKE word || '%';
-
-    -- Montando a consulta SQL
-    sql := 'SELECT 
-    NomeAluno, 
-    RM, 
-    NotaFinalCN,
-    NotaFinalLP,
-    NotaFinalAR,
-    NotaFinalEF,
-    NotaFinalHIS,
-    NotaFinalGEO,
-    NotaFinalEIXO,
-    NotaFinalLI,
-    NotaFinalPR,
-    ComDeficiencia, 
-    Ano, 
-    Turma, ' 
-	|| column_list || '
-FROM tabelageralefdois 
-WHERE Turma LIKE ''' || '${Turma}' || ''' 
-AND Ano = ' || ${Ano} || '
-AND (NotaFinalCN <  ' || ${nota} || ' OR NotaFinalLP <  ' || ${nota} || ' OR NotaFinalAR <  ' || ${nota} || ' OR NotaFinalEF < ' || ${nota} || ' OR NotaFinalHIS < ' || ${nota} || ' OR NotaFinalGEO < ' || ${nota} || ' OR NotaFinalEIXO < ' || ${nota} || ' OR NotaFinalLI < ' || ${nota} || ' OR NotaFinalPR < ' || ${nota} || ') ORDER BY NomeAluno;';
-
-    -- Executando a consulta
-    EXECUTE sql;
-END $$;
-    `;
-    const params = [
-      { name: "etapa", type: TYPES.NVarChar, value: etapa },
-      { name: "Turma", type: TYPES.NVarChar, value: Turma },
-      { name: "Ano", type: TYPES.Int, value: Ano },
-      { name: "Nota", type: TYPES.Int, value: nota }
-
-  ];
-  
-    console.log('Query:', query);
-  
-    const users = await executeQuery(query, params);
-    return users;
-  }
+  const params = [`%${Turma}%`, Ano, nota]; // Define os parâmetros a serem passados na query
+  const users = await executeQuery(query, params); // Executa a query com os parâmetros
+  return users; // Retorna os usuários filtrados
 }
 
 // Função para obter todos os registros da tabela TabelaGeralEFDOIS
@@ -163,12 +91,16 @@ async function getRecordsByFilter(etapa, turma, ano) {
     ORDER BY NomeAluno;
   `;
   
-  const records = await executeQuery(query, [`%${turma}%`, ano, etapa]); // Executa a query com os parâmetros
-  return records; // Retorna os registros filtrados
+  const params = [`%${turma}%`, ano, etapa]; // Define os parâmetros a serem passados na query
+  return await executeQuery(query, params); // Execut ```javascript
+  // Executa a query e retorna os registros filtrados
 }
 
-// Exporta as funções para serem usadas nos controllers
+// Exporta as funções para serem utilizadas em outros módulos
 module.exports = {
+  getAllUsers,
+  getUserById,
+  getUserByFilterNota,
   getAllRecords,
   getRecordById,
   updateField,
