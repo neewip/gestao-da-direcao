@@ -1,4 +1,4 @@
-// models/TabelaGeralEMModel.js
+// models/userModel.js
 
 // Importa a função de conexão do banco de dados (assumindo que já está configurada em outro arquivo)
 const pool = require("../database/connection"); // Ajuste o caminho conforme necessário
@@ -19,32 +19,33 @@ async function executeQuery(query, params = []) {
   });
 }
 
-// Função para obter todos os registros da tabela TabelaGeralEM
+// Função para obter todos os usuários do banco de dados
 async function getAllUsers() {
-  const query = "SELECT * FROM TabelaGeralEM;";  // Define a query SQL para obter todos os registros
+  const query = "SELECT * FROM tabelageralem;";  // Define a query SQL para obter todos os registros da tabela "Users"
   return await executeQuery(query);  // Executa a query usando a função executeQuery
 }
 
-// Função para obter um registro pelo ID
-async function getUser(RM) {
-  const query = "SELECT * FROM TabelaGeralEM WHERE RM = $1";  // Query SQL com um parâmetro para filtrar pelo ID
+// Função para obter um usuário pelo ID
+async function getUserById(RM) {
+  const query = "SELECT * FROM tabelageralem WHERE RM = $1";  // Query SQL com um parâmetro para filtrar pelo ID
   const params = [RM];  // Define o parâmetro para ser passado na query
-  const records = await executeQuery(query, params);  // Executa a query com os parâmetros
-  return records.length > 0 ? records[0] : null;  // Retorna o primeiro registro se houver algum resultado, ou null se não houver
+  const users = await executeQuery(query, params);  // Executa a query com os parâmetros
+  return users.length > 0 ? users[0] : null;  // Retorna o primeiro usuário se houver algum resultado, ou null se não houver
 }
 
 // Função para filtrar registros com base em critérios
-// Função para filtrar registros com base em critérios
-async function getUserByFilter(etapa, turma, ano) {
+async function getUserByFilter(etapa, Turma, Ano) {
   console.log('Valor de etapa:', etapa);
-  console.log('Valor de Turma:', turma);
-  console.log('Valor de Ano:', ano);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
 
-  ano = parseInt(ano); // Converte ano para inteiro
+  Ano = parseInt(Ano); // Converte Ano para inteiro
+
+  // Obtendo a lista de colunas que começam com o valor de 'etapa'
   const columnListQuery = `
     SELECT string_agg(quote_ident(column_name), ', ')
     FROM information_schema.columns
-    WHERE table_name = 'TabelaGeralEM'  
+    WHERE table_name = 'tabelageralem'  
     AND column_name LIKE $1;
   `;
 
@@ -53,50 +54,43 @@ async function getUserByFilter(etapa, turma, ano) {
 
   // Montando a consulta SQL
   const sql = `
-    SELECT 
-      NomeAluno, 
-      RM, 
-      "NotaFinalBIO", 
-      "NotaFinalFIS", 
-      "NotaFinalQUI", 
-      "NotaFinalMA", 
-      "NotaFinalLP", 
-      "NotaFinalAR", 
-      "NotaFinalEF", 
-      "NotaFinalLI", 
-      "NotaFinalHI", 
-      "NotaFinalGE", 
-      "NotaFinalSOC", 
-      "NotaFinalFIL",
-      ComDeficiencia, 
-      Ano, 
-      Turma, 
+        SELECT 
+    NomeAluno, 
+    RM, 
+   "NotaFinalBIO", "NotaFinalFIS", "NotaFinalQUI", "NotaFinalMA", "NotaFinalLP", "NotaFinalAR", "NotaFinalEF", "NotaFinalLI", "NotaFinalHI", "NotaFinalGE", "NotaFinalSOC", "NotaFinalFIL",
+    ComDeficiencia, 
+    Ano, 
+    Turma, 
       ${column_list}
-    FROM TabelaGeralEM 
+    FROM tabelageralem
     WHERE Turma LIKE $1 
-    AND Ano = $2;
+    AND Ano = $2 
   `;
 
-  const params = [turma, ano];
+  const params = [Turma, Ano];
 
   console.log('Query:', sql);
 
-  const records = await executeQuery(sql, params);
-  return records;
+  const users = await executeQuery(sql, params);
+  return users;
 }
 
 // Função para filtrar registros com base em notas
-async function getUserByFilterNota(etapa, turma, ano, nota) {
+
+
+async function getUserByFilterNota(etapa, Turma, Ano, nota) {
   console.log('Valor de etapa:', etapa);
-  console.log('Valor de Turma:', turma);
-  console.log('Valor de Ano:', ano);
+  console.log('Valor de Turma:', Turma);
+  console.log('Valor de Ano:', Ano);
   console.log('Valor de Nota:', nota);
 
-  ano = parseInt(ano); // Converte ano para inteiro
+  Ano = parseInt(Ano); // Converte Ano para inteiro
+
+  // Obtendo a lista de colunas que começam com o valor de 'etapa'
   const columnListQuery = `
     SELECT string_agg(quote_ident(column_name), ', ')
     FROM information_schema.columns
-    WHERE table_name = 'TabelaGeralEM'  
+    WHERE table_name = 'tabelageralem'  
     AND column_name LIKE $1;
   `;
 
@@ -105,44 +99,32 @@ async function getUserByFilterNota(etapa, turma, ano, nota) {
 
   // Montando a consulta SQL
   const sql = `
-    SELECT 
-      NomeAluno, 
-      RM, 
-      "NotaFinalBIO", 
-      "NotaFinalFIS", 
-      "NotaFinalQUI", 
-      "NotaFinalMA", 
-      "NotaFinalLP", 
-      "NotaFinalAR", 
-      "NotaFinalEF", 
-      "NotaFinalLI", 
-      "NotaFinalHI", 
-      "NotaFinalGE", 
-      "NotaFinalSOC", 
-      "NotaFinalFIL",
+        SELECT 
+      NomeAluno, RM, 
+   "NotaFinalBIO", "NotaFinalFIS", "NotaFinalQUI", "NotaFinalMA", "NotaFinalLP", "NotaFinalAR", "NotaFinalEF", "NotaFinalLI", "NotaFinalHI", "NotaFinalGE", "NotaFinalSOC", "NotaFinalFIL",
       ComDeficiencia, 
       Ano, 
       Turma, 
       ${column_list}
-    FROM TabelaGeralEM 
+    FROM tabelageralem
     WHERE Turma LIKE $1 
     AND Ano = $2 
-    AND (NotaFinalBIO < $3 OR NotaFinalFIS < $3 OR NotaFinalQUI < $3 OR NotaFinalMA < $3 OR NotaFinalLP < $3 OR NotaFinalAR < $3 OR NotaFinalEF < $3 OR NotaFinalLI < $3 OR NotaFinalHI < $3 OR NotaFinalGE < $3 OR NotaFinalSOC < $3 OR NotaFinalFIL < $3) 
-    ORDER BY NomeAluno;
-  `;
+AND ("NotaFinalBIO" < $3 OR "NotaFinalFIS" < $3 OR "NotaFinalQUI" < $3 OR "NotaFinalMA" < $3 OR "NotaFinalLP" < $3 OR "NotaFinalAR" < $3 OR "NotaFinalEF" < $3 OR "NotaFinalLI" < $3 OR "NotaFinalHI" < $3 OR "NotaFinalGE" < $3 OR "NotaFinalSOC" < $3 OR "NotaFinalFIL" < $3) ORDER BY NomeAluno;  `;
+  
 
-  const params = [turma, ano, nota];
+  const params = [Turma, Ano, nota];
 
   console.log('Query:', sql);
 
-  const records = await executeQuery(sql, params);
-  return records;
+  const users = await executeQuery(sql, params);
+  return users;
 }
+
 
 // Exporta as funções para serem usadas nos controllers
 module.exports = {
   getAllUsers,
-  getUser,
+  getUserById,
   getUserByFilter,
   getUserByFilterNota,
 };

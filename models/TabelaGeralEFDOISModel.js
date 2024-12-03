@@ -45,7 +45,7 @@ async function getUserByFilter(etapa, Turma, Ano) {
   const columnListQuery = `
     SELECT string_agg(quote_ident(column_name), ', ')
     FROM information_schema.columns
-    WHERE table_name = 'tabelageralefum'  
+    WHERE table_name = 'tabelageralefdois'  
     AND column_name LIKE $1;
   `;
 
@@ -54,41 +54,24 @@ async function getUserByFilter(etapa, Turma, Ano) {
 
   // Montando a consulta SQL
   const sql = `
-    SELECT 
-      NomeAluno, 
-      RM, 
-      "NotaFinalCN",
-
-      "NotaFinalLP",
-
-      "NotaFinalAR",
-
-      "NotaFinalEF",
-
-      "NotaFinalHIS",
-
-      "NotaFinalGEO",
-
-      "NotaFinalEIXO",
-
-      "NotaFinalLI",
-
-      "NotaFinalPR",
-
+     SELECT 
+      NomeAluno, RM, 
+       "NotaFinalCN",
+    "NotaFinalLP",
+    "NotaFinalAR",
+    "NotaFinalEF",
+    "NotaFinalHIS",
+    "NotaFinalGEO",
+    "NotaFinalEIXO",
+    "NotaFinalLI",
+    "NotaFinalPR",
       ComDeficiencia, 
-
       Ano, 
-
-      Turma
- 
+      Turma, 
       ${column_list}
-    FROM TabelaGeralEFDOIS 
-
+    FROM tabelageralefdois
     WHERE Turma LIKE $1 
-
-      AND Ano = $2
-     
- 
+    AND Ano = $2 
   `;
 
   const params = [Turma, Ano];
@@ -112,7 +95,7 @@ async function getUserByFilterNota(etapa, Turma, Ano, nota) {
   const columnListQuery = `
     SELECT string_agg(quote_ident(column_name), ', ')
     FROM information_schema.columns
-    WHERE table_name = 'tabelageralefum'  
+    WHERE table_name = 'tabelageralefdois'  
     AND column_name LIKE $1;
   `;
 
@@ -121,27 +104,25 @@ async function getUserByFilterNota(etapa, Turma, Ano, nota) {
 
   // Montando a consulta SQL
   const sql = `
-    SELECT 
+        SELECT 
       NomeAluno, RM, 
-      "NotaFinalCN", 
-      "NotaFinalLP", 
-      "NotaFinalAR", 
-      "NotaFinalEF", 
-      "NotaFinalCCE", 
-      "NotaFinalLI", 
-      "NotaFinalPF", 
-      "NotaFinalROB", 
-      "NotaFinalPR", 
-      "NotaFinalPSC",
+       "NotaFinalCN",
+    "NotaFinalLP",
+    "NotaFinalAR",
+    "NotaFinalEF",
+    "NotaFinalHIS",
+    "NotaFinalGEO",
+    "NotaFinalEIXO",
+    "NotaFinalLI",
+    "NotaFinalPR",
       ComDeficiencia, 
       Ano, 
       Turma, 
       ${column_list}
-    FROM tabelageralefum 
+    FROM tabelageralefdois
     WHERE Turma LIKE $1 
     AND Ano = $2 
-    AND ("NotaFinalCN" < $3 OR "NotaFinalLP" < $3 OR "NotaFinalAR" < $3 OR "NotaFinalEF" < $3 OR "NotaFinalCCE" < $3 OR "NotaFinalLI" < $3 OR "NotaFinalPF" < $3 OR "NotaFinalROB" < $3 OR "NotaFinalPR" < $3 OR "NotaFinalPSC" < $3) 
-    ORDER BY NomeAluno;
+AND ("NotaFinalCN" <  $3 OR "NotaFinalLP" <  $3 OR "NotaFinalAR" <  $3 OR "NotaFinalEF" < $3 OR "NotaFinalHIS" < $3 OR "NotaFinalGEO" < $3 OR "NotaFinalEIXO" < $3 OR "NotaFinalLI" < $3 OR "NotaFinalPR" < $3) ORDER BY NomeAluno;
   `;
 
   const params = [Turma, Ano, nota];
@@ -159,4 +140,3 @@ module.exports = {
   getUserByFilter,
   getUserByFilterNota,
 };
-
