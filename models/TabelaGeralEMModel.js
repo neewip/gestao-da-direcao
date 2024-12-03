@@ -124,33 +124,47 @@ async function getUserByFilterNota(etapa, Turma, Ano, nota) {
 
   Ano = parseInt(Ano); // Parse etapa as an integer
   const query = `
-   DECLARE @word NVARCHAR(50) = '${etapa}';
-      DECLARE @column_list NVARCHAR(MAX) = (
-          SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
-          FROM INFORMATION_SCHEMA.COLUMNS
-          WHERE table_name = 'TabelaGeralEM'
-          AND column_name LIKE @word + '%'
-          FOR XML PATH('')
-      );
-  
-      SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
-  
-      DECLARE @sql NVARCHAR(MAX) = 'SELECT 
+   DO $$
+DECLARE
+    word TEXT := '${etapa}';  -- Substitua pelo valor desejado
+    column_list TEXT;
+    sql TEXT;
+BEGIN
+    -- Obtendo a lista de colunas que começam com o valor de 'word'
+    SELECT string_agg(quote_ident(column_name), ', ')
+    INTO column_list
+    FROM information_schema.columns
+    WHERE table_name = 'tabelageralem'  -- Lembre-se de que os nomes de tabelas são sensíveis a maiúsculas e minúsculas
+    AND column_name LIKE word || '%';
+
+    -- Montando a consulta SQL
+    sql := 'SELECT 
     NomeAluno, 
     RM, 
-   NotaFinalBIO, NotaFinalFIS, NotaFinalQUI, NotaFinalMA, NotaFinalLP, NotaFinalAR, NotaFinalEF, NotaFinalLI, NotaFinalHI, NotaFinalGE, NotaFinalSOC, NotaFinalFIL,
+    NotaFinalBIO, 
+    NotaFinalFIS, 
+    NotaFinalQUI, 
+    NotaFinalMA, 
+    NotaFinalLP, 
+    NotaFinalAR, 
+    NotaFinalEF, 
+    NotaFinalLI, 
+    NotaFinalHI, 
+    NotaFinalGE, 
+    NotaFinalSOC, 
+    NotaFinalFIL,
     ComDeficiencia, 
     Ano, 
     Turma, ' 
-	+ @column_list + '
-FROM TabelaGeralEM 
-WHERE Turma LIKE ''${Turma}'' 
-AND Ano = ${Ano}
-AND (NotaFinalBIO < ${nota} OR NotaFinalFIS < ${nota} OR NotaFinalQUI < ${nota} OR NotaFinalMA < ${nota} OR NotaFinalLP < ${nota} OR NotaFinalAR < ${nota} OR NotaFinalEF < ${nota} OR NotaFinalLI < ${nota} OR NotaFinalHI < ${nota} OR NotaFinalGE < ${nota} OR NotaFinalSOC < ${nota} OR NotaFinalFIL < ${nota}) ORDER BY NomeAluno;'
+	|| column_list || '
+FROM tabelageralem 
+WHERE Turma LIKE ''' || '${Turma}' || ''' 
+AND Ano = ' || ${Ano} || '
+AND (NotaFinalBIO < ' || ${nota} || ' OR NotaFinalFIS < ' || ${nota} || ' OR NotaFinalQUI < ' || ${nota} || ' OR NotaFinalMA < ' || ${nota} || ' OR NotaFinalLP < ' || ${nota} || ' OR NotaFinalAR < ' || ${nota} || ' OR NotaFinalEF < ' || ${nota} || ' OR NotaFinalLI < ' || ${nota} || ' OR NotaFinalHI < ' || ${nota} || ' OR NotaFinalGE < ' || ${nota} || ' OR NotaFinalSOC < ' || ${nota} || ' OR NotaFinalFIL < ' || ${nota} || ') ORDER BY NomeAluno;';
 
-
-      
-EXEC sp_executesql @sql;
+    -- Executando a consulta
+    EXECUTE sql;
+END $$;
   `;
 
   const params = [

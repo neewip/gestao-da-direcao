@@ -73,20 +73,25 @@ async function getUserByFilter(etapa, Turma, Ano) {
 
   Ano = parseInt(Ano); // Parse etapa as an integer
   const query = `
-    DECLARE @word NVARCHAR(50) = '${etapa}';
-    DECLARE @column_list NVARCHAR(MAX) = (
-        SELECT CONCAT(ISNULL(QUOTENAME(column_name), ''), ',')
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE table_name = 'NotasEMFilter'
-        AND column_name LIKE @word + '%'
-        FOR XML PATH('')
-    );
+  DO $$
+DECLARE
+    word TEXT := '${etapa}';  -- Substitua pelo valor desejado
+    column_list TEXT;
+    sql TEXT;
+BEGIN
+    -- Obtendo a lista de colunas que começam com o valor de 'word'
+    SELECT string_agg(quote_ident(column_name), ', ')
+    INTO column_list
+    FROM information_schema.columns
+    WHERE table_name = 'notasemfilter'  -- Lembre-se de que os nomes de tabelas são sensíveis a maiúsculas e minúsculas se estiverem entre aspas
+    AND column_name LIKE word || '%';
 
-    SET @column_list = LEFT(@column_list, LEN(@column_list) - 1);
+    -- Montando a consulta SQL
+    sql := 'SELECT NomeAluno, ' || column_list || ' FROM NotasEMFilter WHERE Turma LIKE ''' || '${Turma}' || ''' AND Ano = ' || ${Ano} || ' ORDER BY NomeAluno;';
 
-    DECLARE @sql NVARCHAR(MAX) = 'SELECT NomeAluno,' + @column_list + ' FROM NotasEMFilter where Turma LIKE ''${Turma}'' and Ano = ${Ano} ORDER BY NomeAluno;'
-    EXEC sp_executesql @sql;
-  `;
+    -- Executando a consulta
+    EXECUTE sql;
+END $$;`;
 
   console.log('Query:', query);
 
